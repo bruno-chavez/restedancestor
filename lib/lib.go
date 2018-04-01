@@ -15,3 +15,12 @@ func init() {
 func Random(q []database.QuotesList) database.QuotesList {
 	return q[rand.Intn(len(q))]
 }
+
+/*
+//BadRequest returns a ready to use badrequest text, not used for now
+func BadRequest(requestText string) []byte{
+	badRequest := map[string]string{"code": "400", "message": requestText}
+	badRequestJson, _ := json.MarshalIndent(badRequest, "", "")
+	return badRequestJson
+}
+*/
