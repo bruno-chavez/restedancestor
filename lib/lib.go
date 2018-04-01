@@ -12,6 +12,6 @@ func init() {
 }
 
 //Random returns a random quote from a QuoteList slice.
-func Random(q []database.QuotesList) string {
-	return q[rand.Intn(len(q))].Quotes
+func Random(q []database.QuotesList) database.QuotesList {
+	return q[rand.Intn(len(q))]
 }

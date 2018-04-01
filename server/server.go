@@ -9,10 +9,19 @@ import (
 )
 
 //RquoteHandler takes care of the rquote route.
-func RquoteHandler(w http.ResponseWriter, r *http.Request) {
+func RquoteHandler(w http.ResponseWriter, _ *http.Request) {
 
 	slice := database.Parser()
 	marshaledData, _ := json.MarshalIndent(lib.Random(slice), "", "")
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(marshaledData)
+}
+
+//AllquoteHandler takes care of the allquote route.
+func AllquoteHandler(w http.ResponseWriter, _ *http.Request	) {
+	slice := database.Parser()
+	marshaledData, _ := json.MarshalIndent(slice, "", "")
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(marshaledData)

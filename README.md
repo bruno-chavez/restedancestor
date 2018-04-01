@@ -1,4 +1,8 @@
-`restedancestor` is a pretty simple REST API, which returns quotes from the Ancestor of the Darkest Dungeon.
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/bruno-chavez/restedancestor)](https://goreportcard.com/report/github.com/bruno-chavez/restedancestor)
+
+
+`restedancestor` is a pretty simple REST API, delivers quotes from the Ancestor of the Darkest Dungeon in JSON format.
 
 ## Installation
 
@@ -49,7 +53,21 @@ The Ancestor is waiting and listening on port 8000 of localhost
 `rquote` accepts the `GET` method and returns a random quote.
 
 ```
-"Beacons in the darkness, stars in the emptiness of the void."
+{
+"quote": "Beacons in the darkness, stars in the emptiness of the void."
+{
+```
+
+`allquote` accepts the `GET` method and returns all the quotes in the API.
+
+```
+[
+{
+"quote": "Brigands have the run of these lanes, keep to the side path, the Hamlet is just ahead."
+},
+...
+}
+]
 ```
 
 ## Notes
@@ -61,7 +79,7 @@ Only tested on Linux.
 
 Sister project of [ancestorquotes](https://github.com/bruno-chavez/ancestorquotes).
 
-Current version: `0.1`
+Current version: `0.2`
 
 ## Contribute
 
