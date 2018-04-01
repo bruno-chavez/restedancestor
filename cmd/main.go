@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
-	"restedancestor/server"
+	"github.com/bruno-chavez/restedancestor/server"
 )
 
 func main() {

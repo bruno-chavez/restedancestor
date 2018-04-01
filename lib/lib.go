@@ -3,7 +3,7 @@ package lib
 
 import (
 	"math/rand"
-	"restedancestor/database"
+	"github.com/bruno-chavez/restedancestor/database"
 	"time"
 )
 

@@ -1,5 +1,4 @@
-`restedancestor` is a pretty simple REST API,
-which returns quotes from the Ancestor of the Darkest Dungeon.
+`restedancestor` is a pretty simple REST API, which returns quotes from the Ancestor of the Darkest Dungeon.
 
 ## Installation
 
