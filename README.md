@@ -65,6 +65,9 @@ The Ancestor is waiting and listening on port 8000 of localhost
 {
 "quote": "Brigands have the run of these lanes, keep to the side path, the Hamlet is just ahead."
 },
+{
+"quote": "Dispatch this thug in brutal fashion, that all may hear of your arrival!"
+},
 ...
 }
 ]

@@ -1,3 +1,4 @@
+//Package main is the start of the API, handles the router and creates each route.
 package main
 
 import (
