@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/bruno-chavez/restedancestor/server"
 	"github.com/gorilla/mux"
 	"net/http"
-	"github.com/bruno-chavez/restedancestor/server"
 )
 
 func main() {

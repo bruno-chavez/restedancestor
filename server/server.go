@@ -3,9 +3,9 @@ package server
 
 import (
 	"encoding/json"
-	"net/http"
 	"github.com/bruno-chavez/restedancestor/database"
 	"github.com/bruno-chavez/restedancestor/lib"
+	"net/http"
 )
 
 //RquoteHandler takes care of the rquote route.

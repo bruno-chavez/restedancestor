@@ -2,8 +2,8 @@
 package lib
 
 import (
-	"math/rand"
 	"github.com/bruno-chavez/restedancestor/database"
+	"math/rand"
 	"time"
 )
 

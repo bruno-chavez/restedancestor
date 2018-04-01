@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+//QuotesList is used to parse the whole json database in a slice of the QuotesList type.
 type QuotesList struct {
 	Quotes string `json:"quote"`
 }
