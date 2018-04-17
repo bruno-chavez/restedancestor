@@ -1,8 +1,6 @@
 [![GoDoc](https://godoc.org/github.com/bruno-chavez/restedancestor?status.svg)](https://godoc.org/github.com/bruno-chavez/restedancestor)
 [![Go Report Card](https://goreportcard.com/badge/github.com/bruno-chavez/restedancestor)](https://goreportcard.com/report/github.com/bruno-chavez/restedancestor)
 
-![Torch](assets/images/dd.png)
-
 `restedancestor` is a pretty simple REST API, delivers quotes from the Ancestor of the Darkest Dungeon in JSON format.
 
 ## Installation
@@ -45,6 +43,7 @@ $ go get -u github.com/bruno-chavez/restedancestor
 Once installed type on a terminal `restedancestor` and you should see a message like this:
 
 ```
+$ restedancestor
 Welcome to restedancestor, the API is running in a maddening fashion!
 The Ancestor is waiting and listening on port 8000 of localhost
 ```
@@ -52,6 +51,8 @@ The Ancestor is waiting and listening on port 8000 of localhost
 You can communicate with the API in various ways, for example going to your browser and typing on your serach bar `localhost:8000`, followed with one of the routes listed on the Routes seccion, if succesful you should see something like this:
 
 ![browser image](assets/images/browserImage.png)
+
+There are more complete ways of doing requests to the API, and choosing one depends completly on preference, if you like Desktop Apps [Postman](https://www.getpostman.com/) is a pretty powerful tool, prefer web tools? check [Hurl it](https://www.hurl.it/), like CLI apps? [HTTPie](https://httpie.org/) is good enough for the job.
 
 ## Routes
 
