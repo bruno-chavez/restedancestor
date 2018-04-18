@@ -18,8 +18,7 @@ func Parser() []QuotesList {
 	rawjson, _ := os.Open("database/database.json")
 	readjson, _ := ioutil.ReadAll(rawjson)
 
-	//313 is the total numer of quotes.
-	parsedjson := make([]QuotesList, 313)
+	parsedjson := make([]QuotesList, 0)
 	json.Unmarshal(readjson, &parsedjson)
 
 	return parsedjson

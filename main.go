@@ -14,11 +14,11 @@ func main() {
 	router.NewRoute().
 		Path("/rquote").
 		HandlerFunc(server.RquoteHandler).
-		Methods("GET")
+		Methods("GET", "OPTIONS")
 	router.NewRoute().
 		Path("/allquote").
 		HandlerFunc(server.AllquoteHandler).
-		Methods("GET")
+		Methods("GET", "OPTIONS")
 
 	fmt.Println("Welcome to restedancestor, the API is running in a maddening fashion!")
 	fmt.Println("The Ancestor is waiting and listening on localhost:8000")
