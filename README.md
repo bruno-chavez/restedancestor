@@ -10,7 +10,9 @@
 #### From source code:
 
 Requires Go to be installed on your machine. You can install Go from
-https://golang.org/doc/install
+[here](https://golang.org/doc/install).
+
+The [Gorilla mux](https://github.com/gorilla/mux) package is also needed if building from source, be sure to install it before installing `restedancestor`.
 
 Once installed, and with a correctly configured GOPATH, on a terminal type:
 
