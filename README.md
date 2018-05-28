@@ -47,7 +47,7 @@ Once installed type on a terminal `restedancestor` and you should see a message 
 ```
 $ restedancestor
 Welcome to restedancestor, the API is running in a maddening fashion!
-The Ancestor is waiting and listening on port 8000 of localhost
+The Ancestor is waiting and listening on port 8080 of localhost
 ```
 
 You can communicate with the API in various ways, for example going to your browser and typing on your serach bar `localhost:8000`, followed with one of the routes listed on the Routes seccion, if succesful you should see something like this:
@@ -58,7 +58,11 @@ There are more complete ways of doing requests to the API, and choosing one depe
 
 ## Routes
 
-`random` accepts the `GET` and `OPTIONS` method and returns a random quote.
+### Random:
+
+#### GET:
+
+Responds with a random quote
 
 ```
 {
@@ -66,7 +70,19 @@ There are more complete ways of doing requests to the API, and choosing one depe
 {
 ```
 
-`all` accepts the `GET` and `OPTIONS` method and returns all the quotes in the API.
+#### OPTIONS:
+
+Responds with a header where it shows the available type request for that route
+```
+HTTP/1.1 200 OK
+Allow: GET,OPTIONS
+```
+
+### All:
+
+#### GET:
+
+Responds with a all the quotes available in the API.
 
 ```
 [
@@ -80,6 +96,15 @@ There are more complete ways of doing requests to the API, and choosing one depe
 }
 ]
 ```
+
+#### OPTIONS:
+
+Responds with a header where it shows the available type request for that route
+```
+HTTP/1.1 200 OK
+Allow: GET,OPTIONS
+```
+
 
 ## Notes
 
