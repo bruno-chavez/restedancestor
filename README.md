@@ -58,7 +58,7 @@ There are more complete ways of doing requests to the API, and choosing one depe
 
 ## Routes
 
-`rquote` accepts the `GET` method and returns a random quote.
+`random` accepts the `GET` and `OPTIONS` method and returns a random quote.
 
 ```
 {
@@ -66,7 +66,7 @@ There are more complete ways of doing requests to the API, and choosing one depe
 {
 ```
 
-`allquote` accepts the `GET` method and returns all the quotes in the API.
+`all` accepts the `GET` and `OPTIONS` method and returns all the quotes in the API.
 
 ```
 [
@@ -90,7 +90,7 @@ Only tested on Linux.
 
 Sister project of [ancestorquotes](https://github.com/bruno-chavez/ancestorquotes).
 
-Current version: `0.2`
+Current version: `0.3`
 
 ## Contribute
 
