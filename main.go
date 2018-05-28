@@ -1,9 +1,9 @@
-//Package main is the start of the API, handles the router and creates each route.
+// Package main is the start of the API, creates all the routes and sets a handler for each one.
 package main
 
 import (
 	"fmt"
-	"github.com/bruno-chavez/restedancestor/server"
+	"github.com/bruno-chavez/restedancestor/handler"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -12,15 +12,15 @@ func main() {
 
 	router := mux.NewRouter()
 	router.NewRoute().
-		Path("/rquote").
-		HandlerFunc(server.RquoteHandler).
+		Path("/random").
+		HandlerFunc(handler.RandomHandler).
 		Methods("GET", "OPTIONS")
 	router.NewRoute().
-		Path("/allquote").
-		HandlerFunc(server.AllquoteHandler).
+		Path("/all").
+		HandlerFunc(handler.AllHandler).
 		Methods("GET", "OPTIONS")
 
 	fmt.Println("Welcome to restedancestor, the API is running in a maddening fashion!")
-	fmt.Println("The Ancestor is waiting and listening on localhost:8000")
-	http.ListenAndServe(":8000", router)
+	fmt.Println("The Ancestor is waiting and listening on localhost:8080")
+	http.ListenAndServe(":8080", router)
 }
