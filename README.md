@@ -58,7 +58,7 @@ There are more complete ways of doing requests to the API, and choosing one depe
 
 ## Routes
 
-### Random:
+### /random:
 
 #### GET:
 
@@ -78,7 +78,50 @@ HTTP/1.1 200 OK
 Allow: GET,OPTIONS
 ```
 
-### All:
+### /search/{word}:
+
+#### GET:
+
+Where {word} is the word that wants to be found in the database.
+
+For example requesting a GET methond on /search/prince will return a JSON body and a NotFoundStatus Header like this:
+
+```
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+Date: Mon, 04 Jun 2018 09:37:24 GMT
+Content-Length: 70
+
+{
+  "code": "404",
+  "message": "'prince' was not found in the database"
+}
+```
+
+But requesting at /search/swine will return a JSON body with all the quotes that the word was found on and a OKStatus Header:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Mon, 04 Jun 2018 09:39:54 GMT
+Content-Length: 99
+
+[
+  {
+    "quote": "To prosecute our war against the swine, we must first scout their squalid homes."
+  }
+]
+```
+
+#### OPTIONS:
+
+Responds with a header where it shows the available type request for that route
+```
+HTTP/1.1 200 OK
+Allow: GET,OPTIONS
+```
+
+### /all:
 
 #### GET:
 
@@ -115,7 +158,7 @@ Only tested on Linux.
 
 Sister project of [ancestorquotes](https://github.com/bruno-chavez/ancestorquotes).
 
-Current version: `0.3`
+Current version: `0.4`
 
 ## Contribute
 
