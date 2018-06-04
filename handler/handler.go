@@ -50,7 +50,6 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		query := mux.Vars(r)
 		wordToSearch := query["word"]
-
 		matched := false
 		quotesMatched := make(database.QuoteSlice, 0)
 
@@ -80,6 +79,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		}
+
 		if matched {
 			w.Header().Set("Content-Type", "application/json")
 			filteredSLice, _ := json.MarshalIndent(quotesMatched, "", "")
