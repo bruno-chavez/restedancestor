@@ -62,12 +62,17 @@ There are more complete ways of doing requests to the API, and choosing one depe
 
 #### GET:
 
-Responds with a random quote
+Responds with a JSON body with a random quote in it.
 
 ```
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Mon, 04 Jun 2018 09:46:36 GMT
+Content-Length: 67
+
 {
-"quote": "Beacons in the darkness, stars in the emptiness of the void."
-{
+  "quote": "Towering. Fierce. Terrible. Nightmare made material."
+}
 ```
 
 #### OPTIONS:
@@ -128,6 +133,11 @@ Allow: GET,OPTIONS
 Responds with a all the quotes available in the API.
 
 ```
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Mon, 04 Jun 2018 09:47:14 GMT
+Transfer-Encoding: chunked
+
 [
 {
 "quote": "Brigands have the run of these lanes, keep to the side path, the Hamlet is just ahead."
