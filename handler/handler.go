@@ -45,6 +45,7 @@ func AllHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// SearchHandler takes care of the /search/{word} route.
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
