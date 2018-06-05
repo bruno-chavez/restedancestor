@@ -4,9 +4,13 @@
 
 `restedancestor` is a pretty simple REST API, delivers quotes from the Ancestor of the Darkest Dungeon in JSON format.
 
-## Installation
+## Download & Installation
 
-### Linux
+### Executables:
+
+`restedancestor` can be downloaded for every OS [here](https://github.com/bruno-chavez/restedancestor/releases) simply click on the one that has your OS and architecture on its name.
+
+After its downloaded run the executable and start making requests!
 
 #### From source code:
 
