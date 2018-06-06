@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 	"time"
+	"log"
 )
 
 // init is used to seed the rand.Intn function.
@@ -47,21 +48,19 @@ func Parser() QuoteSlice {
 	path = goingBack + path
 
 	rawJSON, err := os.Open(path)
-	readJSON, err2 := ioutil.ReadAll(rawJSON)
-
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
+	readJSON, err2 := ioutil.ReadAll(rawJSON)
 	if err2 != nil {
-		panic(err2)
+		log.Fatal(err2)
 	}
 
 	parsedJSON := make(QuoteSlice, 0)
 	err3 := json.Unmarshal(readJSON, &parsedJSON)
-
 	if err3 != nil {
-		panic(err3)
+		log.Fatal(err3)
 	}
 
 	return parsedJSON
