@@ -4,7 +4,13 @@
 
 `restedancestor` is a pretty simple REST API, delivers quotes from the Ancestor of the Darkest Dungeon in JSON format.
 
-## Download & Installation
+##  Online
+
+`restedancestor` is currently online at https://restedancestor.herokuapp.com, skip to the Routes section to what routes can take requests.
+
+## Local Use
+
+`restedancestor`'s master branch can be used to deploy a local copy for development, testing or for whatever fits your needs, you can either download a binary or compile it yourself, either way follow instructions below.
 
 ### Executables:
 
@@ -37,17 +43,9 @@ And last, on a terminal type:
 $ go install
 ```
 
-## Updating
+##### Usage
 
-To update `restedancestor` simply type:
-
-```
-$ go get -u github.com/bruno-chavez/restedancestor
-```
-
-## Usage
-
-Once installed type on a terminal `restedancestor` and you should see a message like this:
+Once installed and depending on how you installed the api should see a message like this:
 
 ```
 $ restedancestor
