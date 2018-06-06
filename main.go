@@ -6,9 +6,12 @@ import (
 	"github.com/bruno-chavez/restedancestor/handler"
 	"github.com/gorilla/mux"
 	"net/http"
+	"os"
 )
 
 func main() {
+
+	port := os.Getenv("PORT")
 
 	router := mux.NewRouter()
 	router.NewRoute().
@@ -25,6 +28,6 @@ func main() {
 		Methods("GET", "OPTIONS")
 
 	fmt.Println("Welcome to restedancestor, the API is running in a maddening fashion!")
-	fmt.Println("The Ancestor is waiting and listening on localhost:8080")
-	http.ListenAndServe(":8080", router)
+	fmt.Println("The Ancestor is waiting and listening on port ", port)
+	http.ListenAndServe(":" + port, router)
 }

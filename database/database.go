@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"os"
-	"strings"
 	"time"
 	"log"
 )
@@ -33,21 +32,7 @@ func (q QuoteSlice) Random() QuoteType {
 // Parser fetches from database.json and puts it on a slice.
 func Parser() QuoteSlice {
 
-	// Don't worry too much about how Parser works, trust me, it does!
-	currentDir, _ := os.Getwd()
-	totalDoubleDots := len(strings.Split(currentDir, "/"))
-	path := os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
-	goingBack := ""
-	for i := 1; i <= totalDoubleDots; i++ {
-		if i == totalDoubleDots {
-			goingBack = goingBack + ".."
-		} else {
-			goingBack = "../" + goingBack
-		}
-	}
-	path = goingBack + path
-
-	rawJSON, err := os.Open(path)
+	rawJSON, err := os.Open("database/database.json")
 	if err != nil {
 		log.Fatal(err)
 	}
