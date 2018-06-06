@@ -6,7 +6,7 @@
 
 ##  Online
 
-`restedancestor` is currently online at https://restedancestor.herokuapp.com, skip to the Routes section to what routes can take requests.
+`restedancestor` is currently online at https://restedancestor.herokuapp.com, skip to the [Routes](https://github.com/bruno-chavez/restedancestor/tree/master#routes) section to see how you can consume the API.
 
 ## Local Use
 
