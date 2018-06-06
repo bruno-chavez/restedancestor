@@ -1,0 +1,13 @@
+[[constraint]]
+  name = "github.com/gorilla/mux"
+  version = "1.6.2"
+
+[prune]
+  go-tests = true
+  unused-packages = true
+
+# Heroku Config
+[metadata.heroku]
+root-package = "github.com/bruno-chavez/restedancestor"
+install = [ "." ]
+ensure = "false"
