@@ -4,11 +4,11 @@ package database
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"math/rand"
 	"os"
 	"strings"
 	"time"
-	"log"
 )
 
 // init is used to seed the rand.Intn function.

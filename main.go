@@ -3,9 +3,11 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/bruno-chavez/restedancestor/handler"
 	"github.com/gorilla/mux"
-	"net/http"
 )
 
 func main() {
@@ -26,5 +28,8 @@ func main() {
 
 	fmt.Println("Welcome to restedancestor, the API is running in a maddening fashion!")
 	fmt.Println("The Ancestor is waiting and listening on localhost:8080")
-	http.ListenAndServe(":8080", router)
+	err := http.ListenAndServe(":8080", router)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

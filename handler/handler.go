@@ -3,11 +3,12 @@ package handler
 
 import (
 	"encoding/json"
+	"net/http"
+	"strings"
+
 	"github.com/bruno-chavez/restedancestor/database"
 	"github.com/bruno-chavez/restedancestor/lib"
 	"github.com/gorilla/mux"
-	"net/http"
-	"strings"
 )
 
 // slice is a global variable to avoid multiple calls to Parser since always returns the same slice.
