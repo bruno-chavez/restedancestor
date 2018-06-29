@@ -14,7 +14,7 @@
 
 ### Executables:
 
-`restedancestor` can be downloaded for every OS [here](https://github.com/bruno-chavez/restedancestor/releases) simply click on the one that has your OS and architecture on its name.
+`restedancestor` supports Linux and Mac, and can be download [here](https://github.com/bruno-chavez/restedancestor/releases) simply click on the one that has your OS and architecture on its name.
 
 After its downloaded run the executable and start making requests!
 
@@ -168,6 +168,8 @@ This is a pretty small and niche project, created mainly to have fun,
 so do that!
 
 Only tested on Linux.
+
+Not supported for Windows.
 
 Sister project of [ancestorquotes](https://github.com/bruno-chavez/ancestorquotes).
 
