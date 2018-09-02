@@ -26,6 +26,10 @@ func main() {
 		Path("/search/{word}").
 		HandlerFunc(handler.SearchHandler).
 		Methods("GET", "OPTIONS")
+	router.NewRoute().
+		Path("/update").
+		HandlerFunc(handler.UpdateHandler).
+		Methods("GET", "OPTIONS")
 
 	fmt.Println("Welcome to restedancestor, the API is running in a maddening fashion!")
 	u, _ := uuid.NewV4()

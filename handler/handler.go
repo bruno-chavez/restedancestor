@@ -98,3 +98,8 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Allow", "GET,OPTIONS")
 	}
 }
+
+// SearchHandler takes care of the /update route.
+func UpdateHandler(w http.ResponseWriter, r *http.Request) {
+	database.AddUUID()
+}
