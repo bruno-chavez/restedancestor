@@ -101,5 +101,39 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 
 // SearchHandler takes care of the /update route.
 func UpdateHandler(w http.ResponseWriter, r *http.Request) {
-	database.AddUUID()
+	switch r.Method {
+	case "GET":
+		database.AddUUID()
+	case "OPTIONS":
+		w.Header().Set("Allow", "GET,OPTIONS")
+	}
+}
+
+// OneHandler takes care of the /one/{UUID} route.
+func OneHandler(w http.ResponseWriter, r *http.Request) {
+	query := mux.Vars(r)
+	uuidToSearch := query["uuid"]
+	matched := false
+	var quoteMatched database.QuoteType
+
+	// quote is a QuoteType type.
+	for _, quote := range slice {
+		// If a match is found, the quote that the uuid belongs to, is printed.
+		if quote.Uuid.String() == uuidToSearch {
+			quoteMatched = quote
+			matched = true
+			break
+		}
+	}
+
+	if matched {
+		w.Header().Set("Content-Type", "application/json")
+		filteredSLice, _ := json.MarshalIndent(quoteMatched, "", "")
+		w.Write(filteredSLice)
+	} else {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNotFound)
+		notfoundJSON := lib.NotFound(uuidToSearch)
+		w.Write(notfoundJSON)
+	}
 }
