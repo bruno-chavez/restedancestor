@@ -143,6 +143,19 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DislikeHandler(w http.ResponseWriter, r *http.Request) {
+	query := mux.Vars(r)
+	uuidToSearch := query["uuid"]
+
+	if _, err := database.OffsetQuoteFromUUID(uuidToSearch); err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNotFound)
+		notfoundJSON := lib.NotFound(uuidToSearch)
+		w.Write(notfoundJSON)
+
+		return
+	}
+
+	database.DislikeQuote(uuidToSearch)
 }
 
 func TopHandler(w http.ResponseWriter, r *http.Request) {

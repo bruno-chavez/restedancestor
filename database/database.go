@@ -153,5 +153,20 @@ func LikeQuote(uuid string) {
 	ioutil.WriteFile(path, writeJSON, 0)
 }
 
+// DislikeQuote decrements the score of the quote
 func DislikeQuote(uuid string) {
+	offset, _ := OffsetQuoteFromUUID(uuid)
+	slice := Parser()
+	slice[*offset].Score -= 1
+
+	writeJSON, err4 := json.MarshalIndent(slice, "", "  ")
+	if err4 != nil {
+		log.Fatal(err4)
+	}
+
+	path := os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
+	goingBack := ""
+
+	path = goingBack + path
+	ioutil.WriteFile(path, writeJSON, 0)
 }
