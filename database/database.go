@@ -3,6 +3,7 @@ package database
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -21,6 +22,7 @@ func init() {
 type QuoteType struct {
 	Quote string    `json:"quote"`
 	Uuid  uuid.UUID `json:"uuid"`
+	Score int       `json:"score"`
 }
 
 // QuoteSlice exists to provide abstraction to the QuoteType type,
@@ -34,7 +36,6 @@ func (q QuoteSlice) Random() QuoteType {
 
 // Parser fetches from database.json and puts it on a slice.
 func Parser() QuoteSlice {
-
 	// Don't worry too much about how Parser works, trust me, it does!
 	path := os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
 	goingBack := ""
@@ -61,7 +62,7 @@ func Parser() QuoteSlice {
 	return parsedJSON
 }
 
-func AddUUID() {
+func AddStructure() {
 	path := os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
 	goingBack := ""
 
@@ -90,6 +91,7 @@ func AddUUID() {
 		newJSON = append(newJSON, QuoteType{
 			v.Quote,
 			uuid,
+			0,
 		})
 	}
 
@@ -99,4 +101,57 @@ func AddUUID() {
 	}
 
 	ioutil.WriteFile(path, writeJSON, 0)
+}
+
+func OffsetQuoteFromUUID(uuid string) (*int, error) {
+	path := os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
+	goingBack := ""
+
+	path = goingBack + path
+
+	rawJSON, err := os.Open(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rawJSON.Close()
+
+	readJSON, err2 := ioutil.ReadAll(rawJSON)
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+
+	parsedJSON := make(QuoteSlice, 0)
+	err3 := json.Unmarshal(readJSON, &parsedJSON)
+	if err3 != nil {
+		log.Fatal(err3)
+	}
+
+	for k, quote := range parsedJSON {
+		if quote.Uuid.String() == uuid {
+			return &k, nil
+		}
+	}
+
+	return nil, errors.New("Unknown")
+}
+
+// LikeQuote increments the score of the quote
+func LikeQuote(uuid string) {
+	offset, _ := OffsetQuoteFromUUID(uuid)
+	slice := Parser()
+	slice[*offset].Score += 1
+
+	writeJSON, err4 := json.MarshalIndent(slice, "", "  ")
+	if err4 != nil {
+		log.Fatal(err4)
+	}
+
+	path := os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
+	goingBack := ""
+
+	path = goingBack + path
+	ioutil.WriteFile(path, writeJSON, 0)
+}
+
+func DislikeQuote(uuid string) {
 }

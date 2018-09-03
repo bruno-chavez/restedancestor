@@ -11,16 +11,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// slice is a global variable to avoid multiple calls to Parser since always returns the same slice.
-var slice = database.Parser()
-
 // RandomHandler takes care of the 'random' route.
 func RandomHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 
 	case "GET":
-		marshaledData, _ := json.MarshalIndent(slice.Random(), "", "")
+		marshaledData, _ := json.MarshalIndent(database.Parser().Random(), "", "")
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(marshaledData)
@@ -37,7 +34,7 @@ func AllHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 
 	case "GET":
-		marshaledData, _ := json.MarshalIndent(slice, "", "")
+		marshaledData, _ := json.MarshalIndent(database.Parser(), "", "")
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(marshaledData)
@@ -59,7 +56,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		// xSlice is a slice with one word and white-spaces that appear after a filter is applied.
 		// xFilter is a string inside a wordXSlice.
 		// This for is a candidate for been transformed into an recursive function inside lib.
-		for _, quote := range slice {
+		for _, quote := range database.Parser() {
 			firstSlice := strings.Split(quote.Quote, " ")
 
 			for _, firstFilter := range firstSlice {
@@ -103,7 +100,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 func UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		database.AddUUID()
+		database.AddStructure()
 	case "OPTIONS":
 		w.Header().Set("Allow", "GET,OPTIONS")
 	}
@@ -113,27 +110,41 @@ func UpdateHandler(w http.ResponseWriter, r *http.Request) {
 func OneHandler(w http.ResponseWriter, r *http.Request) {
 	query := mux.Vars(r)
 	uuidToSearch := query["uuid"]
-	matched := false
-	var quoteMatched database.QuoteType
 
-	// quote is a QuoteType type.
-	for _, quote := range slice {
-		// If a match is found, the quote that the uuid belongs to, is printed.
-		if quote.Uuid.String() == uuidToSearch {
-			quoteMatched = quote
-			matched = true
-			break
-		}
-	}
-
-	if matched {
-		w.Header().Set("Content-Type", "application/json")
-		filteredSLice, _ := json.MarshalIndent(quoteMatched, "", "")
-		w.Write(filteredSLice)
-	} else {
+	offset, err := database.OffsetQuoteFromUUID(uuidToSearch)
+	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusNotFound)
 		notfoundJSON := lib.NotFound(uuidToSearch)
 		w.Write(notfoundJSON)
+
+		return
 	}
+
+	w.Header().Set("Content-Type", "application/json")
+	filteredSLice, _ := json.MarshalIndent(database.Parser()[*offset], "", "")
+	w.Write(filteredSLice)
+}
+
+func LikeHandler(w http.ResponseWriter, r *http.Request) {
+	query := mux.Vars(r)
+	uuidToSearch := query["uuid"]
+
+	if _, err := database.OffsetQuoteFromUUID(uuidToSearch); err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNotFound)
+		notfoundJSON := lib.NotFound(uuidToSearch)
+		w.Write(notfoundJSON)
+
+		return
+	}
+
+	database.LikeQuote(uuidToSearch)
+}
+
+func DislikeHandler(w http.ResponseWriter, r *http.Request) {
+}
+
+func TopHandler(w http.ResponseWriter, r *http.Request) {
+
 }
