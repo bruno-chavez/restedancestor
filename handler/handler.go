@@ -4,12 +4,15 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/bruno-chavez/restedancestor/database"
 	"github.com/bruno-chavez/restedancestor/lib"
 	"github.com/gorilla/mux"
 )
+
+const NB_TOP = 5
 
 // RandomHandler takes care of the 'random' route.
 func RandomHandler(w http.ResponseWriter, r *http.Request) {
@@ -149,5 +152,20 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func TopHandler(w http.ResponseWriter, r *http.Request) {
+	allQuotes := database.Parser()
+	sort.Sort(allQuotes)
 
+	i := 0
+	top := make(database.QuoteSlice, 0)
+	for _, quote := range allQuotes {
+		if i >= NB_TOP {
+			break
+		}
+		top = append(top, quote)
+		i++
+	}
+
+	marshaledData, _ := json.MarshalIndent(top, "", "")
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(marshaledData)
 }

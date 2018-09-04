@@ -42,6 +42,10 @@ func main() {
 		Path("/one/{uuid}/like").
 		HandlerFunc(handler.LikeHandler).
 		Methods("GET")
+	router.NewRoute().
+		Path("/top").
+		HandlerFunc(handler.TopHandler).
+		Methods("GET", "OPTIONS")
 
 	fmt.Println("Welcome to restedancestor, the API is running in a maddening fashion!")
 

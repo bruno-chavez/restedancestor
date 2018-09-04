@@ -34,6 +34,18 @@ func (q QuoteSlice) Random() QuoteType {
 	return q[rand.Intn(len(q))]
 }
 
+func (q QuoteSlice) Len() int {
+	return len(q)
+}
+
+func (q QuoteSlice) Swap(i int, j int) {
+	q[i], q[j] = q[j], q[i]
+}
+
+func (q QuoteSlice) Less(i int, j int) bool {
+	return q[i].Score > q[j].Score
+}
+
 // Parser fetches from database.json and puts it on a slice.
 func Parser() QuoteSlice {
 	rawJSON, err := os.Open(path())
@@ -93,9 +105,9 @@ func OffsetQuoteFromUUID(uuid string) (*int, error) {
 
 // unparser writes a slice into database.json.
 func unparser(quotes QuoteSlice) error {
-	writeJSON, err4 := json.MarshalIndent(quotes, "", "  ")
-	if err4 != nil {
-		log.Fatal(err4)
+	writeJSON, err := json.MarshalIndent(quotes, "", "  ")
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	return ioutil.WriteFile(path(), writeJSON, 0)
