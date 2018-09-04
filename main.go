@@ -28,24 +28,19 @@ func main() {
 	router.NewRoute().
 		Path("/one/{uuid}").
 		HandlerFunc(handler.OneHandler).
-		Methods("GET")
-	router.NewRoute().
-		Path("/top").
-		HandlerFunc(handler.TopHandler).
-		Methods("GET")
-	// Ça n'a rien à faire dans un ordre GET (+1 pour le suivant)
-	router.NewRoute().
-		Path("/one/{uuid}/dislike").
-		HandlerFunc(handler.DislikeHandler).
-		Methods("GET")
-	router.NewRoute().
-		Path("/one/{uuid}/like").
-		HandlerFunc(handler.LikeHandler).
-		Methods("GET")
+		Methods("GET", "OPTIONS")
 	router.NewRoute().
 		Path("/top").
 		HandlerFunc(handler.TopHandler).
 		Methods("GET", "OPTIONS")
+	router.NewRoute().
+		Path("/one/{uuid}/dislike").
+		HandlerFunc(handler.DislikeHandler).
+		Methods("PATCH", "OPTIONS")
+	router.NewRoute().
+		Path("/one/{uuid}/like").
+		HandlerFunc(handler.LikeHandler).
+		Methods("PATCH", "OPTIONS")
 
 	fmt.Println("Welcome to restedancestor, the API is running in a maddening fashion!")
 

@@ -14,7 +14,7 @@
 
 ### Executables:
 
-`restedancestor` supports Linux and Mac, and can be download [here](https://github.com/bruno-chavez/restedancestor/releases) simply click on the one that has your OS and architecture on its name.
+`restedancestor` supports Linux and Mac, and can be downloaded [here](https://github.com/bruno-chavez/restedancestor/releases) simply click on the one that has your OS and architecture on its name.
 
 After its downloaded run the executable and start making requests!
 
@@ -53,7 +53,7 @@ Welcome to restedancestor, the API is running in a maddening fashion!
 The Ancestor is waiting and listening on port 8080 of localhost
 ```
 
-You can communicate with the API in various ways, for example going to your browser and typing on your serach bar `localhost:8000`, followed with one of the routes listed on the Routes seccion, if succesful you should see something like this:
+You can communicate with the API in various ways, for example going to your browser and typing on your search bar `localhost:8000`, followed with one of the routes listed on the Routes section, if succesful you should see something like this:
 
 ![browser image](assets/images/browserImage.png)
 
@@ -74,7 +74,9 @@ Date: Mon, 04 Jun 2018 09:46:36 GMT
 Content-Length: 67
 
 {
-  "quote": "Towering. Fierce. Terrible. Nightmare made material."
+  "quote": "Towering. Fierce. Terrible. Nightmare made material.",
+  "uuid": "8aa2653b-2a4a-48c9-b0e5-e221aa9237bd",
+  "score": 0
 }
 ```
 
@@ -116,7 +118,9 @@ Content-Length: 99
 
 [
   {
-    "quote": "To prosecute our war against the swine, we must first scout their squalid homes."
+    "quote": "To prosecute our war against the swine, we must first scout their squalid homes.",
+    "uuid": "9bc3e097-5a25-4cbd-80de-e2a77999e979",
+    "score": 0
   }
 ]
 ```
@@ -133,7 +137,7 @@ Allow: GET,OPTIONS
 
 #### GET:
 
-Responds with a all the quotes available in the API.
+Responds with all the quotes available in the API.
 
 ```
 HTTP/1.1 200 OK
@@ -142,14 +146,17 @@ Date: Mon, 04 Jun 2018 09:47:14 GMT
 Transfer-Encoding: chunked
 
 [
-{
-"quote": "Brigands have the run of these lanes, keep to the side path, the Hamlet is just ahead."
-},
-{
-"quote": "Dispatch this thug in brutal fashion, that all may hear of your arrival!"
-},
-...
-}
+  {
+    "quote": "Brigands have the run of these lanes, keep to the side path, the Hamlet is just ahead.",
+    "uuid": "66d6ae53-c78f-4c31-9331-fdce84e29d57",
+    "score": 0
+  },
+  {
+    "quote": "Dispatch this thug in brutal fashion, that all may hear of your arrival!",
+    "uuid": "f8cabf02-0af1-43e7-ab19-e927ca02fa67",
+    "score": 0
+  },
+  ...
 ]
 ```
 
@@ -161,6 +168,107 @@ HTTP/1.1 200 OK
 Allow: GET,OPTIONS
 ```
 
+### /one/{uuid}:
+
+#### GET:
+
+Responds with a JSON body with a random quote in it.
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Mon, 04 Jun 2018 09:46:36 GMT
+Content-Length: 67
+
+{
+  "quote": "Towering. Fierce. Terrible. Nightmare made material.",
+  "uuid": "8aa2653b-2a4a-48c9-b0e5-e221aa9237bd",
+  "score": 0
+}
+```
+
+#### OPTIONS:
+
+Responds with a header where it shows the available type request for that route
+```
+HTTP/1.1 200 OK
+Allow: GET,OPTIONS
+```
+
+### /top:
+
+#### GET:
+
+Responds with all the quotes available in the API.
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Mon, 04 Jun 2018 09:47:14 GMT
+Transfer-Encoding: chunked
+
+[
+  {
+    "quote": "Brigands have the run of these lanes, keep to the side path, the Hamlet is just ahead.",
+    "uuid": "66d6ae53-c78f-4c31-9331-fdce84e29d57",
+    "score": 18
+  },
+  {
+    "quote": "Dispatch this thug in brutal fashion, that all may hear of your arrival!",
+    "uuid": "f8cabf02-0af1-43e7-ab19-e927ca02fa67",
+    "score": 13
+  },
+  ...
+]
+```
+
+#### OPTIONS:
+
+Responds with a header where it shows the available type request for that route
+```
+HTTP/1.1 200 OK
+Allow: GET,OPTIONS
+```
+
+### /one/{uuid}/like:
+
+#### PATCH:
+
+Responds with a JSON body with a random quote in it.
+
+```
+HTTP/1.1 200 OK
+Date: Mon, 04 Jun 2018 09:46:36 GMT
+Content-Length: 0
+```
+
+#### OPTIONS:
+
+Responds with a header where it shows the available type request for that route
+```
+HTTP/1.1 200 OK
+Allow: PATCH,OPTIONS
+```
+
+### /one/{uuid}/dislike:
+
+#### PATCH:
+
+Responds with a JSON body with a random quote in it.
+
+```
+HTTP/1.1 200 OK
+Date: Mon, 04 Jun 2018 09:46:36 GMT
+Content-Length: 0
+```
+
+#### OPTIONS:
+
+Responds with a header where it shows the available type request for that route
+```
+HTTP/1.1 200 OK
+Allow: PATCH,OPTIONS
+```
 
 ## Notes
 
