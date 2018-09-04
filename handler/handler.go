@@ -96,16 +96,6 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// SearchHandler takes care of the /update route.
-func UpdateHandler(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case "GET":
-		database.AddStructure()
-	case "OPTIONS":
-		w.Header().Set("Allow", "GET,OPTIONS")
-	}
-}
-
 // OneHandler takes care of the /one/{UUID} route.
 func OneHandler(w http.ResponseWriter, r *http.Request) {
 	query := mux.Vars(r)

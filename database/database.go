@@ -62,45 +62,9 @@ func Parser() QuoteSlice {
 	return parsedJSON
 }
 
-func AddStructure() {
-	path := os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
-	goingBack := ""
 
-	path = goingBack + path
-
-	rawJSON, err := os.Open(path)
-	if err != nil {
 		log.Fatal(err)
 	}
-	defer rawJSON.Close()
-
-	readJSON, err2 := ioutil.ReadAll(rawJSON)
-	if err2 != nil {
-		log.Fatal(err2)
-	}
-
-	parsedJSON := make(QuoteSlice, 0)
-	newJSON := make(QuoteSlice, 0)
-	err3 := json.Unmarshal(readJSON, &parsedJSON)
-	if err3 != nil {
-		log.Fatal(err3)
-	}
-
-	for _, v := range parsedJSON {
-		uuid, _ := uuid.NewV4()
-		newJSON = append(newJSON, QuoteType{
-			v.Quote,
-			uuid,
-			0,
-		})
-	}
-
-	writeJSON, err4 := json.MarshalIndent(newJSON, "", "  ")
-	if err4 != nil {
-		log.Fatal(err4)
-	}
-
-	ioutil.WriteFile(path, writeJSON, 0)
 }
 
 func OffsetQuoteFromUUID(uuid string) (*int, error) {
