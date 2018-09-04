@@ -36,13 +36,7 @@ func (q QuoteSlice) Random() QuoteType {
 
 // Parser fetches from database.json and puts it on a slice.
 func Parser() QuoteSlice {
-	// Don't worry too much about how Parser works, trust me, it does!
-	path := os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
-	goingBack := ""
-
-	path = goingBack + path
-
-	rawJSON, err := os.Open(path)
+	rawJSON, err := os.Open(path())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -62,33 +56,31 @@ func Parser() QuoteSlice {
 	return parsedJSON
 }
 
+// LikeQuote increments the score of the quote
+func LikeQuote(uuid string) {
+	offset, _ := OffsetQuoteFromUUID(uuid)
+	slice := Parser()
+	slice[*offset].Score += 1
 
+	if err := unparser(slice); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func OffsetQuoteFromUUID(uuid string) (*int, error) {
-	path := os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
-	goingBack := ""
+// DislikeQuote decrements the score of the quote
+func DislikeQuote(uuid string) {
+	offset, _ := OffsetQuoteFromUUID(uuid)
+	slice := Parser()
+	slice[*offset].Score -= 1
 
-	path = goingBack + path
-
-	rawJSON, err := os.Open(path)
-	if err != nil {
+	if err := unparser(slice); err != nil {
 		log.Fatal(err)
 	}
-	defer rawJSON.Close()
+}
 
-	readJSON, err2 := ioutil.ReadAll(rawJSON)
-	if err2 != nil {
-		log.Fatal(err2)
-	}
-
-	parsedJSON := make(QuoteSlice, 0)
-	err3 := json.Unmarshal(readJSON, &parsedJSON)
-	if err3 != nil {
-		log.Fatal(err3)
-	}
+// OffsetQuoteFromUUID find the uuid in the slice and returns its offset
+func OffsetQuoteFromUUID(uuid string) (*int, error) {
+	parsedJSON := Parser()
 
 	for k, quote := range parsedJSON {
 		if quote.Uuid.String() == uuid {
@@ -99,38 +91,16 @@ func OffsetQuoteFromUUID(uuid string) (*int, error) {
 	return nil, errors.New("Unknown")
 }
 
-// LikeQuote increments the score of the quote
-func LikeQuote(uuid string) {
-	offset, _ := OffsetQuoteFromUUID(uuid)
-	slice := Parser()
-	slice[*offset].Score += 1
-
-	writeJSON, err4 := json.MarshalIndent(slice, "", "  ")
+// unparser writes a slice into database.json.
+func unparser(quotes QuoteSlice) error {
+	writeJSON, err4 := json.MarshalIndent(quotes, "", "  ")
 	if err4 != nil {
 		log.Fatal(err4)
 	}
 
-	path := os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
-	goingBack := ""
-
-	path = goingBack + path
-	ioutil.WriteFile(path, writeJSON, 0)
+	return ioutil.WriteFile(path(), writeJSON, 0)
 }
 
-// DislikeQuote decrements the score of the quote
-func DislikeQuote(uuid string) {
-	offset, _ := OffsetQuoteFromUUID(uuid)
-	slice := Parser()
-	slice[*offset].Score -= 1
-
-	writeJSON, err4 := json.MarshalIndent(slice, "", "  ")
-	if err4 != nil {
-		log.Fatal(err4)
-	}
-
-	path := os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
-	goingBack := ""
-
-	path = goingBack + path
-	ioutil.WriteFile(path, writeJSON, 0)
+func path() string {
+	return os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
 }
