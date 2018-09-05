@@ -1,19 +1,41 @@
 package database_test
 
 import (
+	"io/ioutil"
 	"testing"
 
-	"github.com/bruno-chavez/restedancestor/database"
+	d "github.com/bruno-chavez/restedancestor/database"
 )
 
 func TestRandom(t *testing.T) {
-	a := make(database.QuoteSlice, 0)
-	quote := database.QuoteType{
+	s := make(d.QuoteSlice, 0)
+	q := d.QuoteType{
 		Quote: "this is a test",
 	}
-	a = append(a, quote)
-	rand := a.Random()
-	if a.Random() != quote {
-		t.Errorf("Unexpected value %s, expected %s", rand, quote)
+	s = append(s, q)
+	rand := s.Random()
+	if s.Random() != q {
+		t.Errorf("Unexpected value %s, expected %s", rand, q)
+	}
+}
+
+func TestInit(t *testing.T) {
+	db := d.Init("/tmp/db")
+
+	if len(db.Path()) == 0 {
+		t.Error("Unexpected empty value for path")
+	}
+}
+
+func TestParser(t *testing.T) {
+	path := "/tmp/db"
+	json := []byte(`[{"quote":"To be or not to be."}]`)
+	if err := ioutil.WriteFile(path, json, 0644); err != nil {
+		t.Fatalf("Unable to write into test file : %s", err.Error())
+	}
+
+	db := d.Init(path)
+	if len(db.Parser()) == 0 {
+		t.Error("Unexpected empty slice")
 	}
 }

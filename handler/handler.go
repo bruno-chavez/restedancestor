@@ -4,6 +4,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/bruno-chavez/restedancestor/database"
@@ -12,7 +13,8 @@ import (
 )
 
 // slice is a global variable to avoid multiple calls to Parser since always returns the same slice.
-var slice = database.Parser()
+var db = database.Init(os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json")
+var slice = db.Parser()
 
 // RandomHandler takes care of the 'random' route.
 func RandomHandler(w http.ResponseWriter, r *http.Request) {

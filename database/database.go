@@ -7,13 +7,17 @@ import (
 	"log"
 	"math/rand"
 	"os"
-	"strings"
 	"time"
 )
 
-// init is used to seed the rand.Intn function.
-func init() {
+// Init starts package initialisation
+func Init(p string) Database {
+	database := Database{
+		path: p,
+	}
 	rand.Seed(time.Now().UTC().UnixNano())
+
+	return database
 }
 
 // QuoteType is used to parse the whole json database in a slice of the QuoteType type.
@@ -25,43 +29,41 @@ type QuoteType struct {
 // since its always going to be used as a slice.
 type QuoteSlice []QuoteType
 
+// Database is a data structure embedding all behaviors involving storage
+type Database struct {
+	path  string
+	slice QuoteSlice
+}
+
 // Random returns a random quote from a QuoteSlice type.
 func (q QuoteSlice) Random() QuoteType {
 	return q[rand.Intn(len(q))]
 }
 
 // Parser fetches from database.json and puts it on a slice.
-func Parser() QuoteSlice {
-
-	// Don't worry too much about how Parser works, trust me, it does!
-	currentDir, _ := os.Getwd()
-	totalDoubleDots := len(strings.Split(currentDir, "/"))
-	path := os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
-	goingBack := ""
-	for i := 1; i <= totalDoubleDots; i++ {
-		if i == totalDoubleDots {
-			goingBack = goingBack + ".."
-		} else {
-			goingBack = "../" + goingBack
+func (d Database) Parser() QuoteSlice {
+	if d.slice == nil {
+		rawJSON, err := os.Open(d.path)
+		if err != nil {
+			log.Fatal(err)
 		}
-	}
-	path = goingBack + path
 
-	rawJSON, err := os.Open(path)
-	if err != nil {
-		log.Fatal(err)
-	}
+		readJSON, err2 := ioutil.ReadAll(rawJSON)
+		if err2 != nil {
+			log.Fatal(err2)
+		}
 
-	readJSON, err2 := ioutil.ReadAll(rawJSON)
-	if err2 != nil {
-		log.Fatal(err2)
+		parsedJSON := make(QuoteSlice, 0)
+		err3 := json.Unmarshal(readJSON, &parsedJSON)
+		if err3 != nil {
+			log.Fatal(err3)
+		}
+		d.slice = parsedJSON
 	}
+	return d.slice
+}
 
-	parsedJSON := make(QuoteSlice, 0)
-	err3 := json.Unmarshal(readJSON, &parsedJSON)
-	if err3 != nil {
-		log.Fatal(err3)
-	}
-
-	return parsedJSON
+// Path returns the storage path
+func (d Database) Path() string {
+	return d.path
 }
