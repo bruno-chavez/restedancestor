@@ -25,25 +25,8 @@ func main() {
 		Path("/search/{word}").
 		HandlerFunc(handler.SearchHandler).
 		Methods("GET", "OPTIONS")
-	router.NewRoute().
-		Path("/one/{uuid}").
-		HandlerFunc(handler.OneHandler).
-		Methods("GET", "OPTIONS")
-	router.NewRoute().
-		Path("/top").
-		HandlerFunc(handler.TopHandler).
-		Methods("GET", "OPTIONS")
-	router.NewRoute().
-		Path("/one/{uuid}/dislike").
-		HandlerFunc(handler.DislikeHandler).
-		Methods("PATCH", "OPTIONS")
-	router.NewRoute().
-		Path("/one/{uuid}/like").
-		HandlerFunc(handler.LikeHandler).
-		Methods("PATCH", "OPTIONS")
 
 	fmt.Println("Welcome to restedancestor, the API is running in a maddening fashion!")
-
 	fmt.Println("The Ancestor is waiting and listening on localhost:8080")
 	err := http.ListenAndServe(":8080", router)
 	if err != nil {
