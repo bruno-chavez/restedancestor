@@ -4,6 +4,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/bruno-chavez/restedancestor/database"
@@ -11,8 +12,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// slice is a global variable to avoid multiple calls to Parser since always returns the same slice.
-var slice = database.Parser()
+const NB_TOP = 5
 
 // RandomHandler takes care of the 'random' route.
 func RandomHandler(w http.ResponseWriter, r *http.Request) {
@@ -20,7 +20,7 @@ func RandomHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 
 	case "GET":
-		marshaledData, _ := json.MarshalIndent(slice.Random(), "", "")
+		marshaledData, _ := json.MarshalIndent(database.Parser().Random(), "", "")
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(marshaledData)
@@ -37,7 +37,7 @@ func AllHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 
 	case "GET":
-		marshaledData, _ := json.MarshalIndent(slice, "", "")
+		marshaledData, _ := json.MarshalIndent(database.Parser(), "", "")
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(marshaledData)
@@ -59,7 +59,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		// xSlice is a slice with one word and white-spaces that appear after a filter is applied.
 		// xFilter is a string inside a wordXSlice.
 		// This for is a candidate for been transformed into an recursive function inside lib.
-		for _, quote := range slice {
+		for _, quote := range database.Parser() {
 			firstSlice := strings.Split(quote.Quote, " ")
 
 			for _, firstFilter := range firstSlice {
@@ -94,6 +94,100 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 			w.Write(notfoundJSON)
 		}
 
+	case "OPTIONS":
+		w.Header().Set("Allow", "GET,OPTIONS")
+	}
+}
+
+// OneHandler takes care of the /one/{UUID} route.
+func OneHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		query := mux.Vars(r)
+		uuidToSearch := query["uuid"]
+
+		offset, err := database.OffsetQuoteFromUUID(uuidToSearch)
+		if err != nil {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusNotFound)
+			notfoundJSON := lib.NotFound(uuidToSearch)
+			w.Write(notfoundJSON)
+
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		filteredSLice, _ := json.MarshalIndent(database.Parser()[*offset], "", "")
+		w.Write(filteredSLice)
+	case "OPTIONS":
+		w.Header().Set("Allow", "GET,OPTIONS")
+	}
+}
+
+// LikeHandler takes care of the /one/{UUID}/like route.
+func LikeHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "PATCH":
+		query := mux.Vars(r)
+		uuidToSearch := query["uuid"]
+
+		if _, err := database.OffsetQuoteFromUUID(uuidToSearch); err != nil {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusNotFound)
+			notfoundJSON := lib.NotFound(uuidToSearch)
+			w.Write(notfoundJSON)
+
+			return
+		}
+
+		database.LikeQuote(uuidToSearch)
+	case "OPTIONS":
+		w.Header().Set("Allow", "PATCH,OPTIONS")
+	}
+}
+
+// DislikeHandler takes care of the /one/{UUID}/dislike route.
+func DislikeHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "PATCH":
+		query := mux.Vars(r)
+		uuidToSearch := query["uuid"]
+
+		if _, err := database.OffsetQuoteFromUUID(uuidToSearch); err != nil {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusNotFound)
+			notfoundJSON := lib.NotFound(uuidToSearch)
+			w.Write(notfoundJSON)
+
+			return
+		}
+
+		database.DislikeQuote(uuidToSearch)
+	case "OPTIONS":
+		w.Header().Set("Allow", "PATCH,OPTIONS")
+	}
+}
+
+// TopHandler takes care of the /top route.
+func TopHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		allQuotes := database.Parser()
+		sort.Sort(allQuotes)
+
+		i := 0
+		top := make(database.QuoteSlice, 0)
+		for _, quote := range allQuotes {
+			if i >= NB_TOP {
+				break
+			}
+			top = append(top, quote)
+			i++
+		}
+
+		marshaledData, _ := json.MarshalIndent(top, "", "")
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(marshaledData)
 	case "OPTIONS":
 		w.Header().Set("Allow", "GET,OPTIONS")
 	}
