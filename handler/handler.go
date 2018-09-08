@@ -20,27 +20,20 @@ var slice = db.Parser()
 func RandomHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
-
 	case "GET":
 		marshaledData, _ := json.MarshalIndent(slice.Random(), "", "")
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(marshaledData)
-
 	case "OPTIONS":
 		w.Header().Set("Allow", "GET,OPTIONS")
 	}
-}
-
-func AHandler(w http.ResponseWriter) {
-	w.Write([]byte("this is a string"))
 }
 
 // AllHandler takes care of the 'all' route.
 func AllHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
-
 	case "GET":
 		marshaledData, _ := json.MarshalIndent(slice, "", "")
 
@@ -98,7 +91,6 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 			notfoundJSON := lib.NotFound(wordToSearch)
 			w.Write(notfoundJSON)
 		}
-
 	case "OPTIONS":
 		w.Header().Set("Allow", "GET,OPTIONS")
 	}

@@ -4,16 +4,19 @@ import (
 	"net/http"
 	"testing"
 
-	h "github.com/bruno-chavez/restedancestor/handler"
+	"github.com/bruno-chavez/restedancestor/handler"
 )
 
-var writed []byte
+var (
+	writed []byte
+	h      http.Header
+)
 
 type StubWriter struct {
 }
 
 func (f StubWriter) Header() http.Header {
-	h := http.Header{}
+	h = http.Header{}
 
 	return h
 }
@@ -25,14 +28,27 @@ func (f StubWriter) Write(b []byte) (int, error) {
 }
 
 func (f StubWriter) WriteHeader(statusCode int) {
-
 }
 
-func TestRandom(t *testing.T) {
+func TestRandomOptions(t *testing.T) {
+	handlerOptions(t, handler.RandomHandler)
+}
 
+func TestAllOptions(t *testing.T) {
+	handlerOptions(t, handler.AllHandler)
+}
+
+func TestSearchOptions(t *testing.T) {
+	handlerOptions(t, handler.SearchHandler)
+}
+
+func handlerOptions(t *testing.T, fn func(w http.ResponseWriter, r *http.Request)) {
 	w := StubWriter{}
-	h.AHandler(w)
-	if len(writed) == 0 {
-		t.Errorf("Unexpected value %s, expected %s", "a", "z")
+	r := http.Request{
+		Method: "OPTIONS",
+	}
+	fn(w, &r)
+	if len(h.Get("Allow")) == 0 {
+		t.Error("Unexpected void value for « Allow » header")
 	}
 }
