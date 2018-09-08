@@ -30,7 +30,10 @@ func RandomHandler(w http.ResponseWriter, r *http.Request) {
 	case "OPTIONS":
 		w.Header().Set("Allow", "GET,OPTIONS")
 	}
+}
 
+func AHandler(w http.ResponseWriter) {
+	w.Write([]byte("this is a string"))
 }
 
 // AllHandler takes care of the 'all' route.
