@@ -19,8 +19,8 @@ func TestRandom(t *testing.T) {
 	}
 }
 
-func TestInit(t *testing.T) {
-	db := d.Init("/tmp/db")
+func TestNewDb(t *testing.T) {
+	db := d.NewDb("/tmp/db")
 
 	if len(db.Path()) == 0 {
 		t.Error("Unexpected empty value for path")
@@ -34,7 +34,7 @@ func TestParser(t *testing.T) {
 		t.Fatalf("Unable to write into test file : %s", err.Error())
 	}
 
-	db := d.Init(path)
+	db := d.NewDb(path)
 	if len(db.Parser()) == 0 {
 		t.Error("Unexpected empty slice")
 	}

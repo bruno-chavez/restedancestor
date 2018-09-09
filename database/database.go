@@ -10,12 +10,16 @@ import (
 	"time"
 )
 
-// Init starts package initialisation
-func Init(p string) Database {
-	database := Database{
+// init is used to seed the rand.Intn function.
+func init() {
+	rand.Seed(time.Now().UTC().UnixNano())
+}
+
+// NewDb initializes Database struct
+func NewDb(p string) database {
+	database := database{
 		path: p,
 	}
-	rand.Seed(time.Now().UTC().UnixNano())
 
 	return database
 }
@@ -29,8 +33,8 @@ type QuoteType struct {
 // since its always going to be used as a slice.
 type QuoteSlice []QuoteType
 
-// Database is a data structure embedding all behaviors involving storage
-type Database struct {
+// database is a data structure embedding all behaviors involving storage
+type database struct {
 	path  string
 	slice QuoteSlice
 }
@@ -41,7 +45,7 @@ func (q QuoteSlice) Random() QuoteType {
 }
 
 // Parser fetches from database.json and puts it on a slice.
-func (d Database) Parser() QuoteSlice {
+func (d database) Parser() QuoteSlice {
 	if d.slice == nil {
 		rawJSON, err := os.Open(d.path)
 		if err != nil {
@@ -64,6 +68,6 @@ func (d Database) Parser() QuoteSlice {
 }
 
 // Path returns the storage path
-func (d Database) Path() string {
+func (d database) Path() string {
 	return d.path
 }

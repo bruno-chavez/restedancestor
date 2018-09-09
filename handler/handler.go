@@ -13,7 +13,7 @@ import (
 )
 
 // slice is a global variable to avoid multiple calls to Parser since always returns the same slice.
-var db = database.Init(os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json")
+var db = database.NewDb(os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json")
 var slice = db.Parser()
 
 // RandomHandler takes care of the 'random' route.
@@ -44,7 +44,7 @@ func AllHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// SearchHandler takes care of the /search/{word} route.
+// SearchHandler takes care of the '/search/{word}' route.
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
