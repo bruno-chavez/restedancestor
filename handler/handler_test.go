@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	writed []byte
-	h      http.Header
+	written []byte
+	h       http.Header
 )
 
 type StubWriter struct {
@@ -22,7 +22,7 @@ func (f StubWriter) Header() http.Header {
 }
 
 func (f StubWriter) Write(b []byte) (int, error) {
-	writed = b
+	written = b
 
 	return 0, nil
 }
