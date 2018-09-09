@@ -4,6 +4,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/bruno-chavez/restedancestor/database"
@@ -12,30 +13,27 @@ import (
 )
 
 // slice is a global variable to avoid multiple calls to Parser since always returns the same slice.
-var slice = database.Parser()
+var db = database.NewDb(os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json")
+var slice = db.Parser()
 
 // RandomHandler takes care of the 'random' route.
 func RandomHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
-
 	case "GET":
 		marshaledData, _ := json.MarshalIndent(slice.Random(), "", "")
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(marshaledData)
-
 	case "OPTIONS":
 		w.Header().Set("Allow", "GET,OPTIONS")
 	}
-
 }
 
 // AllHandler takes care of the 'all' route.
 func AllHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
-
 	case "GET":
 		marshaledData, _ := json.MarshalIndent(slice, "", "")
 
@@ -46,7 +44,7 @@ func AllHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// SearchHandler takes care of the /search/{word} route.
+// SearchHandler takes care of the '/search/{word}' route.
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
@@ -93,7 +91,6 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 			notfoundJSON := lib.NotFound(wordToSearch)
 			w.Write(notfoundJSON)
 		}
-
 	case "OPTIONS":
 		w.Header().Set("Allow", "GET,OPTIONS")
 	}
