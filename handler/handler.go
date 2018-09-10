@@ -4,6 +4,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/bruno-chavez/restedancestor/database"
@@ -12,8 +13,9 @@ import (
 )
 
 const nbTop = 5
-// slice is a global variable to avoid multiple calls to Parser since always returns the same slice.
-var slice = database.Parser()
+
+// parsedQuotes is a global variable to avoid multiple calls to Parser since always returns the same parsedQuotes.
+var parsedQuotes = database.Parser()
 
 // RandomHandler takes care of the 'random' route.
 func RandomHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,7 +23,7 @@ func RandomHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 
 	case "GET":
-		marshaledData, _ := json.MarshalIndent(slice.Random(), "", "")
+		marshaledData, _ := json.MarshalIndent(parsedQuotes.Random(), "", "")
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(marshaledData)
@@ -38,7 +40,7 @@ func AllHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 
 	case "GET":
-		marshaledData, _ := json.MarshalIndent(slice, "", "")
+		marshaledData, _ := json.MarshalIndent(parsedQuotes, "", "")
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(marshaledData)
@@ -57,10 +59,10 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		quotesMatched := make(database.QuoteSlice, 0)
 
 		// quote is a QuoteType type.
-		// xSlice is a slice with one word and white-spaces that appear after a filter is applied.
+		// xSlice is a parsedQuotes with one word and white-spaces that appear after a filter is applied.
 		// xFilter is a string inside a wordXSlice.
 		// This for is a candidate for been transformed into an recursive function inside lib.
-		for _, quote := range slice {
+		for _, quote := range parsedQuotes {
 			firstSlice := strings.Split(quote.Quote, " ")
 
 			for _, firstFilter := range firstSlice {
@@ -173,12 +175,12 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 func TopHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		allQuotes := database.Parser()
-		sort.Sort(allQuotes)
+
+		sort.Sort(parsedQuotes)
 
 		i := 0
 		top := make(database.QuoteSlice, 0)
-		for _, quote := range allQuotes {
+		for _, quote := range parsedQuotes {
 			if i >= nbTop {
 				break
 			}
