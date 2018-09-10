@@ -12,7 +12,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-const NB_TOP = 5
+const nbTop = 5
 
 // RandomHandler takes care of the 'random' route.
 func RandomHandler(w http.ResponseWriter, r *http.Request) {
@@ -178,7 +178,7 @@ func TopHandler(w http.ResponseWriter, r *http.Request) {
 		i := 0
 		top := make(database.QuoteSlice, 0)
 		for _, quote := range allQuotes {
-			if i >= NB_TOP {
+			if i >= nbTop {
 				break
 			}
 			top = append(top, quote)
