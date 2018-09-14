@@ -49,6 +49,11 @@ func main() {
 		HandlerFunc(handler.LikeHandler).
 		Methods("PATCH", "OPTIONS")
 
+	router.NewRoute().
+		Path("/senile").
+		HandlerFunc(handler.SenileHandler).
+		Methods("GET", "OPTIONS")
+
 	fmt.Println("Welcome to restedancestor, the API is running in a maddening fashion!")
 	fmt.Println("The Ancestor is waiting and listening on localhost:8080")
 	err := http.ListenAndServe(":8080", router)

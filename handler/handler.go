@@ -195,3 +195,29 @@ func TopHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Allow", "GET,OPTIONS")
 	}
 }
+
+// SenileHandler takes care of the 'senile' route
+func SenileHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+
+	case "GET":
+		data := parsedQuotes.Random()
+		data1 := parsedQuotes.Random()
+
+		quoteArray := strings.Split(data.Quote, " ")
+		quoteArray1 := strings.Split(data1.Quote, " ")
+		quote := ""
+
+		if len(quoteArray) < len(quoteArray1) {
+			quote = stringModifier(quoteArray, quoteArray1)
+		} else {
+			quote = stringModifier(quoteArray1, quoteArray)
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(quote))
+
+	case "OPTIONS":
+		w.Header().Set("Allow", "GET,OPTIONS")
+	}
+}
