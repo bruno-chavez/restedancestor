@@ -168,6 +168,34 @@ HTTP/1.1 200 OK
 Allow: GET,OPTIONS
 ```
 
+### /senile:
+
+#### GET:
+
+Responds with a JSON body with a random quote in it.
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Mon, 04 Jun 2018 09:46:36 GMT
+Content-Length: 134
+
+{
+  "quote": "invention! A spark without kindling is a goal without hope.",
+  "uuid": "00000000-0000-0000-0000-000000000000",
+  "score": 0
+}
+```
+
+#### OPTIONS:
+
+Responds with a header where it shows the available type request for that route
+```
+HTTP/1.1 200 OK
+Allow: GET,OPTIONS
+```
+
+
 ### /one/{uuid}:
 
 #### GET:

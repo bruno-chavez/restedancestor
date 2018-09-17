@@ -214,8 +214,10 @@ func SenileHandler(w http.ResponseWriter, r *http.Request) {
 			quote = stringModifier(quoteArray1, quoteArray)
 		}
 
+		joinedQuote := database.QuoteType{Quote: quote}
+		marshaledData, _ := json.MarshalIndent(joinedQuote, "", "")
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(quote))
+		w.Write(marshaledData)
 
 	case "OPTIONS":
 		w.Header().Set("Allow", "GET,OPTIONS")
