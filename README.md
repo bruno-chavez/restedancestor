@@ -45,7 +45,7 @@ $ go install
 
 ##### Usage
 
-Once installed and depending on how you installed the api should see a message like this:
+Once installed and depending on how you installed the API should see a message like this:
 
 ```
 $ restedancestor
@@ -61,9 +61,9 @@ There are more complete ways of doing requests to the API, and choosing one depe
 
 ## Routes
 
-### /random:
+### `/random`
 
-#### GET:
+##### GET:
 
 Responds with a JSON body with a random quote in it.
 
@@ -80,7 +80,7 @@ Content-Length: 67
 }
 ```
 
-#### OPTIONS:
+##### OPTIONS:
 
 Responds with a header where it shows the available type request for that route
 ```
@@ -88,9 +88,9 @@ HTTP/1.1 200 OK
 Allow: GET,OPTIONS
 ```
 
-### /search/{word}:
+### `/search/{word}`
 
-#### GET:
+##### GET:
 
 Where {word} is the word that wants to be found in the database.
 
@@ -125,7 +125,7 @@ Content-Length: 99
 ]
 ```
 
-#### OPTIONS:
+##### OPTIONS:
 
 Responds with a header where it shows the available type request for that route
 ```
@@ -133,11 +133,11 @@ HTTP/1.1 200 OK
 Allow: GET,OPTIONS
 ```
 
-### /all:
+### `/all`
 
-#### GET:
+##### GET:
 
-Responds with all the quotes available in the API.
+Responds with a JSON body with all the quotes available in the API.
 
 ```
 HTTP/1.1 200 OK
@@ -160,7 +160,7 @@ Transfer-Encoding: chunked
 ]
 ```
 
-#### OPTIONS:
+##### OPTIONS:
 
 Responds with a header where it shows the available type request for that route
 ```
@@ -168,11 +168,12 @@ HTTP/1.1 200 OK
 Allow: GET,OPTIONS
 ```
 
-### /senile:
+### `/senile`
 
-#### GET:
+##### GET:
 
-Responds with a JSON body with a random quote in it.
+Responds with a JSON body with an original quote made from merging parts
+of two existing quotes.
 
 ```
 HTTP/1.1 200 OK
@@ -187,7 +188,7 @@ Content-Length: 134
 }
 ```
 
-#### OPTIONS:
+##### OPTIONS:
 
 Responds with a header where it shows the available type request for that route
 ```
@@ -196,11 +197,11 @@ Allow: GET,OPTIONS
 ```
 
 
-### /one/{uuid}:
+### `/one/{uuid}`
 
-#### GET:
+##### GET:
 
-Responds with a JSON body with a random quote in it.
+Where {uuid} is the unique identifier of a quote, respondes with a JSON body with that quote in it.
 
 ```
 HTTP/1.1 200 OK
@@ -215,7 +216,7 @@ Content-Length: 67
 }
 ```
 
-#### OPTIONS:
+##### OPTIONS:
 
 Responds with a header where it shows the available type request for that route
 ```
@@ -223,11 +224,11 @@ HTTP/1.1 200 OK
 Allow: GET,OPTIONS
 ```
 
-### /top:
+### `/top`
 
-#### GET:
+##### GET:
 
-Responds with all the quotes available in the API.
+Responds with the top five most liked quotes in a JSON body.
 
 ```
 HTTP/1.1 200 OK
@@ -250,7 +251,7 @@ Transfer-Encoding: chunked
 ]
 ```
 
-#### OPTIONS:
+##### OPTIONS:
 
 Responds with a header where it shows the available type request for that route
 ```
@@ -258,11 +259,11 @@ HTTP/1.1 200 OK
 Allow: GET,OPTIONS
 ```
 
-### /one/{uuid}/like:
+### `/one/{uuid}/like`
 
-#### PATCH:
+##### PATCH:
 
-Responds with a JSON body with a random quote in it.
+Responds with a Not Found Error in case the uuid is wrong, or an OK status if not.
 
 ```
 HTTP/1.1 200 OK
@@ -270,7 +271,7 @@ Date: Mon, 04 Jun 2018 09:46:36 GMT
 Content-Length: 0
 ```
 
-#### OPTIONS:
+##### `OPTIONS`
 
 Responds with a header where it shows the available type request for that route
 ```
@@ -278,11 +279,11 @@ HTTP/1.1 200 OK
 Allow: PATCH,OPTIONS
 ```
 
-### /one/{uuid}/dislike:
+### `/one/{uuid}/dislike`
 
-#### PATCH:
+##### PATCH:
 
-Responds with a JSON body with a random quote in it.
+Responds with a Not Found Error in case the uuid is wrong, or an OK status if not.
 
 ```
 HTTP/1.1 200 OK
@@ -290,7 +291,7 @@ Date: Mon, 04 Jun 2018 09:46:36 GMT
 Content-Length: 0
 ```
 
-#### OPTIONS:
+##### OPTIONS:
 
 Responds with a header where it shows the available type request for that route
 ```
@@ -309,7 +310,7 @@ Not supported for Windows.
 
 Sister project of [ancestorquotes](https://github.com/bruno-chavez/ancestorquotes).
 
-Current version: `0.4`
+Current version: `0.5`
 
 ## Contribute
 
