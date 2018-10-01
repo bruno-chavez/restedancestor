@@ -54,6 +54,11 @@ func main() {
 		HandlerFunc(handler.SenileHandler).
 		Methods("GET", "OPTIONS")
 
+	router.NewRoute().
+		Path("/remove/{uuid}").
+		HandlerFunc(handler.SenileHandler).
+		Methods("DELETE", "OPTIONS")
+
 	fmt.Println("Welcome to restedancestor, the API is running in a maddening fashion!")
 	fmt.Println("The Ancestor is waiting and listening on localhost:8080")
 	err := http.ListenAndServe(":8080", router)

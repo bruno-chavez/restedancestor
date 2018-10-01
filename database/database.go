@@ -9,8 +9,6 @@ import (
 	"math/rand"
 	"os"
 	"time"
-
-	"github.com/satori/go.uuid"
 )
 
 // init is used to seed the rand.Intn function.
@@ -101,6 +99,21 @@ func OffsetQuoteFromUUID(uuid string) (*int, error) {
 	}
 
 	return nil, errors.New("unknown")
+}
+
+// Delete the object for the given offset
+func Delete(offset *int) (*bool, error) {
+
+	copy(parsedJSON[*offset:], parsedJSON[*offset+1:])
+	parsedJSON[len(parsedJSON)-1] = nil
+	parsedJSON = parsedJSON[:len(parsedJSON)-1]
+
+	if err := unparser(parsedJSON); err != nil {
+		log.Fatal(err)
+		return false, errors.New("Could not delete")
+	}
+
+	return true, nil
 }
 
 // unparser writes a slice into database.json.

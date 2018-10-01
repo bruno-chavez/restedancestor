@@ -22,6 +22,22 @@ func NotFound(notFoundWord string) []byte {
 	return notFoundJSON
 }
 
+// InternalServerError returns a ready to write message for ResponseWriter when needed a 503 error.
+func InternalServerError(uuid string) []byte {
+	internalError := map[string]string{"code": "503", "message": "Unable to delete phrase with ID = '" + uuid + "'"}
+	internalErrorJSON, _ := json.MarshalIndent(internalError, "", "")
+
+	return internalErrorJSON
+}
+
+// ResultMsg returns a ready to write message for ResponseWriter when needed a message.
+func ResultMsg(message string) []byte {
+	msg := map[string]string{"code": "200", "message": "'" + message + "'"}
+	msgJSON, _ := json.MarshalIndent(msg, "", "")
+
+	return msgJSON
+}
+
 // Filter returns a slice with all the words of a QuoteSlice after been filtered.
 /*func Filter(filters []string, slice database.QuoteSlice) []string {
 	var count int

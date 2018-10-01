@@ -223,3 +223,34 @@ func SenileHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Allow", "GET,OPTIONS")
 	}
 }
+
+// DeleteHandler deletes the quotre corresponding to the given uuid
+func DeleteHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "DELETE":
+		query := mux.Vars(r)
+		uuidToDelete := query["uuid"]
+		//find and remove
+		offset, err := database.OffsetQuoteFromUUID(uuidToSearch)
+		if err != nil {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusNotFound)
+			notfoundJSON := lib.NotFound(uuidToSearch)
+			w.Write(notfoundJSON)
+
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		result, err := database.Delete(offset)
+		if err != nil {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusInternalServerError)
+			errorJSON := lib.InternalServerError(uuidToDelete)
+			w.Write(errorJSON)
+		}
+		resultMsg := lib.ResultMsg("Successfully deleted")
+		w.Write(resultMsg)
+	case "OPTIONS":
+		w.Header().Set("Allow", "DELETE,OPTIONS")
+	}
+}
