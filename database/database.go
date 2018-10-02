@@ -9,6 +9,8 @@ import (
 	"math/rand"
 	"os"
 	"time"
+	
+	"github.com/satori/go.uuid"
 )
 
 // init is used to seed the rand.Intn function.
