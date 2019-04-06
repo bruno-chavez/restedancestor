@@ -15,9 +15,9 @@ func BadRequest(requestText string) []byte{
 */
 
 // NotFound returns a ready to write message for ResponseWriter when needed a 404 error.
-func NotFound(notFoundWord string) []byte {
-	notFound := map[string]string{"code": "404", "message": "'" + notFoundWord + "' was not found in the database"}
-	notFoundJSON, _ := json.MarshalIndent(notFound, "", "")
+func NotFound(notFoundMessage string) []byte {
+	notFound := map[string]string{"code": "404", "message": "'" + notFoundMessage + "' was not found in the database"}
+	notFoundJSON, _ := json.Marshal(notFound)
 
 	return notFoundJSON
 }

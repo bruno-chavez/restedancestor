@@ -53,7 +53,7 @@ Welcome to restedancestor, the API is running in a maddening fashion!
 The Ancestor is waiting and listening on port 8080 of localhost
 ```
 
-You can communicate with the API in various ways, for example going to your browser and typing on your search bar `localhost:8000`, followed with one of the routes listed on the Routes section, if succesful you should see something like this:
+You can communicate with the API in various ways, for example going to your browser and typing on your search bar `localhost:8080`, followed with one of the routes listed on the Routes section, if succesful you should see something like this:
 
 ![browser image](assets/images/browserImage.png)
 

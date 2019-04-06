@@ -18,7 +18,7 @@ func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
 }
 
-// QuoteType is used to parse the whole json database in a slice of the QuoteType type.
+// QuoteType is used to parse the whole json database in a slice
 type QuoteType struct {
 	Quote string    `json:"quote"`
 	Uuid  uuid.UUID `json:"uuid"`
