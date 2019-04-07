@@ -1,3 +1,4 @@
+// Package database takes care of read / write process.
 package database
 
 import (
@@ -6,11 +7,16 @@ import (
 	"os"
 )
 
-type Database struct{}
+type Database interface {
+	Read() []byte
+	Write([]byte) error
+}
+
+type File struct{}
 
 // read fetches data from storage
-func (d Database) read() []byte {
-	rawJSON, err := os.Open(path())
+func (f File) Read() []byte {
+	rawJSON, err := os.Open(f.path())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -25,10 +31,10 @@ func (d Database) read() []byte {
 }
 
 // write effectively writes data into storage
-func (d Database) write(data []byte) error {
-	return ioutil.WriteFile(path(), data, 0)
+func (f File) Write(data []byte) error {
+	return ioutil.WriteFile(f.path(), data, 0)
 }
 
-func path() string {
+func (f File) path() string {
 	return os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
 }

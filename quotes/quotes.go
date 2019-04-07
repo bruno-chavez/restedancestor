@@ -1,5 +1,4 @@
-// Package database takes care of properly handle the database to be used in other parts of the API.
-package database
+package quotes
 
 import (
 	"encoding/json"
@@ -8,8 +7,10 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/bruno-chavez/restedancestor/database"
 	"github.com/satori/go.uuid"
 )
+
 // init is used to seed the rand.Intn function.
 func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
@@ -43,13 +44,10 @@ func (q QuoteSlice) Less(i int, j int) bool {
 	return q[i].Score > q[j].Score
 }
 
-var db
-
 // Parser fetches from database.json and puts it on a slice.
-func Parser(data Database) QuoteSlice {
-	db = &data
+func Parser(data database.Database) QuoteSlice {
 	parsedJSON := make(QuoteSlice, 0)
-	err3 := json.Unmarshal(data.read(), &parsedJSON)
+	err3 := json.Unmarshal(data.Read(), &parsedJSON)
 	if err3 != nil {
 		log.Fatal(err3)
 	}
@@ -58,27 +56,27 @@ func Parser(data Database) QuoteSlice {
 }
 
 // LikeQuote increments the score of the quote
-func (q QuoteSlice) LikeQuote(uuid string) {
-	offset, _ := q.OffsetQuoteFromUUID(uuid)
+func (q QuoteSlice) LikeQuote(db database.Database, uuid string) {
+	offset, _ := q.OffsetQuoteFromUUID(db, uuid)
 	q[*offset].Score++
 
-	if err := unparser(q); err != nil {
+	if err := unparser(db, q); err != nil {
 		log.Fatal(err)
 	}
 }
 
 // DislikeQuote decrements the score of the quote
-func (q QuoteSlice) DislikeQuote(uuid string) {
-	offset, _ := q.OffsetQuoteFromUUID(uuid)
+func (q QuoteSlice) DislikeQuote(db database.Database, uuid string) {
+	offset, _ := q.OffsetQuoteFromUUID(db, uuid)
 	q[*offset].Score--
 
-	if err := unparser(q); err != nil {
+	if err := unparser(db, q); err != nil {
 		log.Fatal(err)
 	}
 }
 
 // OffsetQuoteFromUUID find the uuid in the slice and returns its offset
-func (q QuoteSlice) OffsetQuoteFromUUID(uuid string) (*int, error) {
+func (q QuoteSlice) OffsetQuoteFromUUID(db database.Database, uuid string) (*int, error) {
 
 	for k, quote := range q {
 
@@ -91,11 +89,11 @@ func (q QuoteSlice) OffsetQuoteFromUUID(uuid string) (*int, error) {
 }
 
 // unparser writes a slice into database.
-func unparser(quotes QuoteSlice) error {
+func unparser(db database.Database, quotes QuoteSlice) error {
 	writeJSON, err := json.MarshalIndent(quotes, "", "  ")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return db.write(writeJSON)
+	return db.Write(writeJSON)
 }

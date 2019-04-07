@@ -9,14 +9,15 @@ import (
 
 	"github.com/bruno-chavez/restedancestor/database"
 	"github.com/bruno-chavez/restedancestor/lib"
+	"github.com/bruno-chavez/restedancestor/quotes"
 	"github.com/gorilla/mux"
 )
 
 const nbTop = 5
 
 // parsedQuotes is a global variable to avoid multiple calls to Parser since always returns the same parsedQuotes.
-var db = &database.Database{}
-var parsedQuotes = database.Parser(*db)
+var db = &database.File{}
+var parsedQuotes = quotes.Parser(*db)
 
 // RandomHandler takes care of the 'random' route.
 func RandomHandler(w http.ResponseWriter, r *http.Request) {
@@ -57,7 +58,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		query := mux.Vars(r)
 		wordToSearch := query["word"]
 		matched := false
-		quotesMatched := make(database.QuoteSlice, 0)
+		quotesMatched := make(quotes.QuoteSlice, 0)
 
 		// quote is a QuoteType type.
 		// xSlice is a parsedQuotes with one word and white-spaces that appear after a filter is applied.
@@ -110,7 +111,7 @@ func OneHandler(w http.ResponseWriter, r *http.Request) {
 		query := mux.Vars(r)
 		uuidToSearch := query["uuid"]
 
-		offset, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch)
+		offset, err := parsedQuotes.OffsetQuoteFromUUID(db, uuidToSearch)
 		if err != nil {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusNotFound)
@@ -135,7 +136,7 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 		query := mux.Vars(r)
 		uuidToSearch := query["uuid"]
 
-		if _, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch); err != nil {
+		if _, err := parsedQuotes.OffsetQuoteFromUUID(db, uuidToSearch); err != nil {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusNotFound)
 			notfoundJSON := lib.NotFound(uuidToSearch)
@@ -144,7 +145,7 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		parsedQuotes.LikeQuote(uuidToSearch)
+		parsedQuotes.LikeQuote(db, uuidToSearch)
 	case "OPTIONS":
 		w.Header().Set("Allow", "PATCH,OPTIONS")
 	}
@@ -157,7 +158,7 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 		query := mux.Vars(r)
 		uuidToSearch := query["uuid"]
 
-		if _, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch); err != nil {
+		if _, err := parsedQuotes.OffsetQuoteFromUUID(db, uuidToSearch); err != nil {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusNotFound)
 			notfoundJSON := lib.NotFound(uuidToSearch)
@@ -166,7 +167,7 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		parsedQuotes.DislikeQuote(uuidToSearch)
+		parsedQuotes.DislikeQuote(db, uuidToSearch)
 	case "OPTIONS":
 		w.Header().Set("Allow", "PATCH,OPTIONS")
 	}
@@ -180,7 +181,7 @@ func TopHandler(w http.ResponseWriter, r *http.Request) {
 		sort.Sort(parsedQuotes)
 
 		i := 0
-		top := make(database.QuoteSlice, 0)
+		top := make(quotes.QuoteSlice, 0)
 		for _, quote := range parsedQuotes {
 			if i >= nbTop {
 				break
@@ -215,7 +216,7 @@ func SenileHandler(w http.ResponseWriter, r *http.Request) {
 			quote = stringModifier(quoteArray1, quoteArray)
 		}
 
-		joinedQuote := database.QuoteType{Quote: quote}
+		joinedQuote := quotes.QuoteType{Quote: quote}
 		marshaledData, _ := json.MarshalIndent(joinedQuote, "", "")
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(marshaledData)
