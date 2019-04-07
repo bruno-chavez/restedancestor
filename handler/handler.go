@@ -15,7 +15,8 @@ import (
 const nbTop = 5
 
 // parsedQuotes is a global variable to avoid multiple calls to Parser since always returns the same parsedQuotes.
-var parsedQuotes = database.Parser()
+var db = &database.Database{}
+var parsedQuotes = database.Parser(*db)
 
 // RandomHandler takes care of the 'random' route.
 func RandomHandler(w http.ResponseWriter, r *http.Request) {
@@ -109,7 +110,7 @@ func OneHandler(w http.ResponseWriter, r *http.Request) {
 		query := mux.Vars(r)
 		uuidToSearch := query["uuid"]
 
-		offset, err := database.OffsetQuoteFromUUID(uuidToSearch)
+		offset, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch)
 		if err != nil {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusNotFound)
@@ -120,7 +121,7 @@ func OneHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		filteredSLice, _ := json.MarshalIndent(database.Parser()[*offset], "", "")
+		filteredSLice, _ := json.MarshalIndent(parsedQuotes[*offset], "", "")
 		w.Write(filteredSLice)
 	case "OPTIONS":
 		w.Header().Set("Allow", "GET,OPTIONS")
@@ -134,7 +135,7 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 		query := mux.Vars(r)
 		uuidToSearch := query["uuid"]
 
-		if _, err := database.OffsetQuoteFromUUID(uuidToSearch); err != nil {
+		if _, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch); err != nil {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusNotFound)
 			notfoundJSON := lib.NotFound(uuidToSearch)
@@ -143,7 +144,7 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		database.LikeQuote(uuidToSearch)
+		parsedQuotes.LikeQuote(uuidToSearch)
 	case "OPTIONS":
 		w.Header().Set("Allow", "PATCH,OPTIONS")
 	}
@@ -156,7 +157,7 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 		query := mux.Vars(r)
 		uuidToSearch := query["uuid"]
 
-		if _, err := database.OffsetQuoteFromUUID(uuidToSearch); err != nil {
+		if _, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch); err != nil {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusNotFound)
 			notfoundJSON := lib.NotFound(uuidToSearch)
@@ -165,7 +166,7 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		database.DislikeQuote(uuidToSearch)
+		parsedQuotes.DislikeQuote(uuidToSearch)
 	case "OPTIONS":
 		w.Header().Set("Allow", "PATCH,OPTIONS")
 	}
