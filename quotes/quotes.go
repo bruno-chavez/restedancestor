@@ -40,24 +40,25 @@ func (q QuoteSlice) Swap(i int, j int) {
 	q[i], q[j] = q[j], q[i]
 }
 
+// Less defines the meaning of "sort"
 func (q QuoteSlice) Less(i int, j int) bool {
 	return q[i].Score > q[j].Score
 }
 
 // Parser fetches from database.json and puts it on a slice.
 func Parser(data database.Database) QuoteSlice {
-	parsedJSON := make(QuoteSlice, 0)
-	err3 := json.Unmarshal(data.Read(), &parsedJSON)
-	if err3 != nil {
-		log.Fatal(err3)
+	q := make(QuoteSlice, 0)
+	err := json.Unmarshal(data.Read(), &q)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	return parsedJSON
+	return q
 }
 
 // LikeQuote increments the score of the quote
 func (q QuoteSlice) LikeQuote(db database.Database, uuid string) {
-	offset, _ := q.OffsetQuoteFromUUID(db, uuid)
+	offset, _ := q.OffsetQuoteFromUUID(uuid)
 	q[*offset].Score++
 
 	if err := unparser(db, q); err != nil {
@@ -67,7 +68,7 @@ func (q QuoteSlice) LikeQuote(db database.Database, uuid string) {
 
 // DislikeQuote decrements the score of the quote
 func (q QuoteSlice) DislikeQuote(db database.Database, uuid string) {
-	offset, _ := q.OffsetQuoteFromUUID(db, uuid)
+	offset, _ := q.OffsetQuoteFromUUID(uuid)
 	q[*offset].Score--
 
 	if err := unparser(db, q); err != nil {
@@ -76,7 +77,7 @@ func (q QuoteSlice) DislikeQuote(db database.Database, uuid string) {
 }
 
 // OffsetQuoteFromUUID find the uuid in the slice and returns its offset
-func (q QuoteSlice) OffsetQuoteFromUUID(db database.Database, uuid string) (*int, error) {
+func (q QuoteSlice) OffsetQuoteFromUUID(uuid string) (*int, error) {
 
 	for k, quote := range q {
 

@@ -7,14 +7,16 @@ import (
 	"os"
 )
 
+// Database describes accesses to a storage
 type Database interface {
 	Read() []byte
 	Write([]byte) error
 }
 
+// File is a storage onto the disk
 type File struct{}
 
-// read fetches data from storage
+// Read fetches data from storage
 func (f File) Read() []byte {
 	rawJSON, err := os.Open(f.path())
 	if err != nil {
@@ -30,11 +32,12 @@ func (f File) Read() []byte {
 	return readJSON
 }
 
-// write effectively writes data into storage
+// Write effectively writes data into storage
 func (f File) Write(data []byte) error {
 	return ioutil.WriteFile(f.path(), data, 0)
 }
 
 func (f File) path() string {
-	return os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database.json"
+	p := "/src/github.com/bruno-chavez/restedancestor/database/database.json"
+	return os.Getenv("GOPATH") + p
 }

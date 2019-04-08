@@ -111,7 +111,7 @@ func OneHandler(w http.ResponseWriter, r *http.Request) {
 		query := mux.Vars(r)
 		uuidToSearch := query["uuid"]
 
-		offset, err := parsedQuotes.OffsetQuoteFromUUID(db, uuidToSearch)
+		offset, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch)
 		if err != nil {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusNotFound)
@@ -136,7 +136,7 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 		query := mux.Vars(r)
 		uuidToSearch := query["uuid"]
 
-		if _, err := parsedQuotes.OffsetQuoteFromUUID(db, uuidToSearch); err != nil {
+		if _, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch); err != nil {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusNotFound)
 			notfoundJSON := lib.NotFound(uuidToSearch)
@@ -158,7 +158,7 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 		query := mux.Vars(r)
 		uuidToSearch := query["uuid"]
 
-		if _, err := parsedQuotes.OffsetQuoteFromUUID(db, uuidToSearch); err != nil {
+		if _, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch); err != nil {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusNotFound)
 			notfoundJSON := lib.NotFound(uuidToSearch)
