@@ -20,7 +20,6 @@ var parsedQuotes = quotes.Parser(*db)
 
 // Random takes care of the 'random' route.
 func Random(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-
 	err := writeJSON(w, parsedQuotes.Random())
 	if err != nil {
 		log.Fatal(err)
@@ -37,7 +36,6 @@ func All(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 
 // Search takes care of the /search/{word} route.
 func Search(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
-
 	word := p.ByName("word")
 	matched := false
 	quotesMatched := make(quotes.QuoteSlice, 0)
@@ -84,7 +82,6 @@ func Search(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 
 // Senile takes care of the 'senile' route
 func Senile(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-
 	data := parsedQuotes.Random()
 	data1 := parsedQuotes.Random()
 
@@ -107,7 +104,6 @@ func Senile(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 
 // Find takes care of the /one/{UUID} route.
 func Find(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
-
 	uuidToSearch := p.ByName("uuid")
 
 	offset, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch)
@@ -127,7 +123,6 @@ func Find(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 
 // Like takes care of the /one/{UUID}/like route.
 func Like(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
-
 	uuidToSearch := p.ByName("uuid")
 
 	if _, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch); err != nil {
@@ -144,7 +139,6 @@ func Like(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 
 // Dislike takes care of the /one/{UUID}/dislike route.
 func Dislike(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
-
 	uuidToSearch := p.ByName("uuid")
 
 	if _, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch); err != nil {
@@ -161,12 +155,11 @@ func Dislike(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 
 // Top takes care of the /top route.
 func Top(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-
 	sort.Sort(parsedQuotes)
 
 	i := 0
-	top := make(quotes.QuoteSlice, 0)
-	for _, quote := range parsedQuotes {
+	top := make([]quotes.QuoteType, 0)
+	for _, quote := range parsedQuotes.Data {
 		if i >= nbTop {
 			break
 		}

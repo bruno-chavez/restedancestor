@@ -6,17 +6,20 @@ import (
 
 type DataDouble struct{}
 
-var raw = `[
-  {
-    "quote": "There is a place, beneath those ancient ruins, in the moor, that calls out to the boldest among them...",
-    "uuid": "240f6e4e-3f28-4876-9ece-c88599c15c78",
-    "score": 0
-  },
-  {
-    "quote": "'We are the Flame!', they cry, 'And Darkness fears us!'",
-    "uuid": "3d3bd030-74bf-4fcb-a0e0-b4dac38a688e",
-    "score": 0
-  }]`
+var raw = `{
+    "data" : [
+      {
+        "quote": "There is a place, beneath those ancient ruins, in the moor, that calls out to the boldest among them...",
+        "uuid": "240f6e4e-3f28-4876-9ece-c88599c15c78",
+        "score": 0
+      },
+      {
+        "quote": "'We are the Flame!', they cry, 'And Darkness fears us!'",
+        "uuid": "3d3bd030-74bf-4fcb-a0e0-b4dac38a688e",
+        "score": 0
+      }
+    ]
+  }`
 
 // Read provides in-memory data
 func (d DataDouble) Read() []byte {
@@ -97,9 +100,9 @@ func TestLikeQuote(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error While fetching quote")
 	}
-	originalQuote := quotes[*offset]
+	originalQuote := quotes.Data[*offset]
 	quotes.LikeQuote(db, uuidToSearch)
-	newQuote := quotes[*offset]
+	newQuote := quotes.Data[*offset]
 
 	if originalQuote.Score+1 != newQuote.Score {
 		t.Errorf("New score isn't equal to original score + 1")
@@ -114,9 +117,9 @@ func TestDislikeQuote(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error While fetching quote")
 	}
-	originalQuote := quotes[*offset]
+	originalQuote := quotes.Data[*offset]
 	quotes.DislikeQuote(db, uuidToSearch)
-	newQuote := quotes[*offset]
+	newQuote := quotes.Data[*offset]
 
 	if originalQuote.Score-1 != newQuote.Score {
 		t.Errorf("New score isn't equal to original score - 1")
