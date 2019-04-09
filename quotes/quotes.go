@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/bruno-chavez/restedancestor/database"
@@ -16,16 +17,17 @@ func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
 }
 
-// QuoteType is used to parse the whole json database in a slice of the QuoteType type.
+// QuoteType describes a quote.
 type QuoteType struct {
 	Quote string    `json:"quote"`
 	Uuid  uuid.UUID `json:"uuid"`
 	Score int       `json:"score"`
 }
 
-// Quotes exists to provide abstraction to the QuoteType type.
+// Quotes is used to parse the whole json database.
 type Quotes struct {
-	Data []QuoteType `json:"data"`
+	Data    []QuoteType `json:"data"`
+	Indexes indexes     `json:"index"`
 }
 
 // Random returns a random quote from a Quotes type.
@@ -88,6 +90,56 @@ func (q Quotes) OffsetQuoteFromUUID(uuid string) (*int, error) {
 	}
 
 	return nil, errors.New("unknown")
+}
+
+// index is an inverted index : for each word, list all documents that contain it.
+type index struct {
+	Word  string      `json:"word"`
+	Uuids []uuid.UUID `json:"uuids"`
+}
+
+type indexes []index
+
+// Index indexes all the data
+func (q Quotes) Index(db database.Database) {
+	q.Indexes = make(indexes, 0)
+	const limitSize = 3
+	for _, quote := range q.Data {
+		words := strings.FieldsFunc(quote.Quote, func(r rune) bool {
+			switch r {
+			case '\'', '!', ',', '.', ' ':
+				return true
+			}
+			return false
+		})
+		for _, word := range words {
+			if len(word) > limitSize {
+				// First Find offset
+				o := -1
+				for k, index := range q.Indexes {
+					if index.Word == word {
+						o = k
+						break
+					}
+				}
+
+				// Doesn't exist, create index
+				if o == -1 {
+					idx := index{
+						Word:  word,
+						Uuids: []uuid.UUID{quote.Uuid},
+					}
+					q.Indexes = append(q.Indexes, idx)
+					continue
+				}
+
+				// Exists, append u
+				index := &(q.Indexes[o])
+				index.Uuids = append(index.Uuids, quote.Uuid)
+			}
+		}
+	}
+	unparser(db, q)
 }
 
 // unparser writes a slice into database.

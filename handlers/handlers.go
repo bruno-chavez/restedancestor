@@ -2,7 +2,6 @@
 package handlers
 
 import (
-	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
 	"sort"
@@ -10,6 +9,7 @@ import (
 
 	"github.com/bruno-chavez/restedancestor/database"
 	"github.com/bruno-chavez/restedancestor/quotes"
+	"github.com/julienschmidt/httprouter"
 )
 
 const nbTop = 5
@@ -28,6 +28,7 @@ func Random(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 
 // All takes care of the 'all' route.
 func All(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
+	parsedQuotes.Index(db)
 	err := writeJSON(w, parsedQuotes)
 	if err != nil {
 		log.Fatal(err)
@@ -38,13 +39,13 @@ func All(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 func Search(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 	word := p.ByName("word")
 	matched := false
-	quotesMatched := make(quotes.QuoteSlice, 0)
+	quotesMatched := make([]quotes.QuoteType, 0)
 
 	// quote is a QuoteType type.
 	// xSlice is a parsedQuotes with one word and white-spaces that appear after a filter is applied.
 	// xFilter is a string inside a wordXSlice.
 	// This for is a candidate for been transformed into an recursive function inside lib.
-	for _, quote := range parsedQuotes {
+	for _, quote := range parsedQuotes.Data {
 		firstSlice := strings.Split(quote.Quote, " ")
 
 		for _, firstFilter := range firstSlice {
@@ -115,7 +116,8 @@ func Find(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 		return
 	}
 
-	err = writeJSON(w, parsedQuotes[*offset])
+	quotes := parsedQuotes.Data
+	err = writeJSON(w, quotes[*offset])
 	if err != nil {
 		log.Fatal(err)
 	}

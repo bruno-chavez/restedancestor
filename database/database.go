@@ -38,6 +38,5 @@ func (f File) Write(data []byte) error {
 }
 
 func (f File) path() string {
-	p := "/src/github.com/bruno-chavez/restedancestor/database/database.json"
-	return os.Getenv("GOPATH") + p
+	return os.Getenv("GOPATH") + "/src/github.com/bruno-chavez/restedancestor/database/database2.json"
 }
