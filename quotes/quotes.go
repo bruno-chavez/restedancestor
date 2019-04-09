@@ -17,6 +17,14 @@ func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
 }
 
+// index is an inverted index : for each word, list all documents that contain it.
+type index struct {
+	Word  string      `json:"word"`
+	Uuids []uuid.UUID `json:"uuids"`
+}
+
+type indexes []index
+
 // QuoteType describes a quote.
 type QuoteType struct {
 	Quote string    `json:"quote"`
@@ -92,14 +100,6 @@ func (q Quotes) OffsetQuoteFromUUID(uuid string) (*int, error) {
 	return nil, errors.New("unknown")
 }
 
-// index is an inverted index : for each word, list all documents that contain it.
-type index struct {
-	Word  string      `json:"word"`
-	Uuids []uuid.UUID `json:"uuids"`
-}
-
-type indexes []index
-
 // Index indexes all the data
 func (q Quotes) Index(db database.Database) {
 	q.Indexes = make(indexes, 0)
@@ -115,16 +115,10 @@ func (q Quotes) Index(db database.Database) {
 		for _, word := range words {
 			if len(word) > limitSize {
 				// First Find offset
-				o := -1
-				for k, index := range q.Indexes {
-					if index.Word == word {
-						o = k
-						break
-					}
-				}
+				k, err := q.Indexes.offsetIndexFromWord(word, quote.Uuid)
 
 				// Doesn't exist, create index
-				if o == -1 {
+				if err != nil {
 					idx := index{
 						Word:  word,
 						Uuids: []uuid.UUID{quote.Uuid},
@@ -134,12 +128,24 @@ func (q Quotes) Index(db database.Database) {
 				}
 
 				// Exists, append u
-				index := &(q.Indexes[o])
+				index := &(q.Indexes[*k])
 				index.Uuids = append(index.Uuids, quote.Uuid)
 			}
 		}
 	}
 	unparser(db, q)
+}
+
+// offsetQuoteFromWord find the index with a word in the slice and returns its offset
+func (i *indexes) offsetIndexFromWord(w string, u uuid.UUID) (*int, error) {
+
+	for k, idx := range *i {
+		if idx.Word == w {
+			return &k, nil
+		}
+	}
+
+	return nil, errors.New("unknown index")
 }
 
 // unparser writes a slice into database.
