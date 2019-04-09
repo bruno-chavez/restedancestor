@@ -23,10 +23,20 @@ type index struct {
 	Uuids []uuid.UUID `json:"uuids"`
 }
 
+func (i index) isUUIDKnown(u uuid.UUID) bool {
+	for _, uu := range i.Uuids {
+		if uu == u {
+			return true
+		}
+	}
+
+	return false
+}
+
 type indexes []index
 
 // offsetQuoteFromWord find the index with a word in the slice and returns its offset
-func (i *indexes) offsetIndexFromWord(w string, u uuid.UUID) (*int, error) {
+func (i *indexes) offsetIndexFromWord(w string) (*int, error) {
 
 	for k, idx := range *i {
 		if idx.Word == w {
@@ -40,7 +50,7 @@ func (i *indexes) offsetIndexFromWord(w string, u uuid.UUID) (*int, error) {
 // setIndex creates or append an index
 func (i *indexes) setIndex(w string, u uuid.UUID) {
 	// First Find offset
-	k, err := i.offsetIndexFromWord(w, u)
+	k, err := i.offsetIndexFromWord(w)
 
 	// Doesn't exist, create index
 	if err != nil {
@@ -54,7 +64,9 @@ func (i *indexes) setIndex(w string, u uuid.UUID) {
 
 	// Exists, append u
 	idx := &((*i)[*k])
-	idx.Uuids = append(idx.Uuids, u)
+	if !idx.isUUIDKnown(u) {
+		idx.Uuids = append(idx.Uuids, u)
+	}
 }
 
 // QuoteType describes a quote.
@@ -144,13 +156,32 @@ func (q Quotes) Index(db database.Database) {
 			}
 			return false
 		})
-		for _, word := range words {
-			if len(word) > limitSize {
-				q.Indexes.setIndex(word, quote.Uuid)
+		for _, w := range words {
+			wLower := strings.ToLower(w)
+			if len(wLower) > limitSize {
+				q.Indexes.setIndex(wLower, quote.Uuid)
 			}
 		}
 	}
 	unparser(db, q)
+}
+
+// List returns all quotes containing a word
+func (q Quotes) List(w string) *[]QuoteType {
+	k, err := q.Indexes.offsetIndexFromWord(w)
+	if err != nil {
+		return nil
+	}
+
+	qt := make([]QuoteType, 0)
+
+	for _, u := range q.Indexes[*k].Uuids {
+		j, _ := q.OffsetQuoteFromUUID(u.String())
+		quote := q.Data[*j]
+		qt = append(qt, quote)
+	}
+
+	return &qt
 }
 
 // unparser writes a slice into database.

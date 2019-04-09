@@ -37,39 +37,12 @@ func All(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 
 // Search takes care of the /search/{word} route.
 func Search(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
-	word := p.ByName("word")
+	word := strings.ToLower(p.ByName("word"))
 	matched := false
-	quotesMatched := make([]quotes.QuoteType, 0)
+	qs := parsedQuotes.List(word)
 
-	// quote is a QuoteType type.
-	// xSlice is a parsedQuotes with one word and white-spaces that appear after a filter is applied.
-	// xFilter is a string inside a wordXSlice.
-	// This for is a candidate for been transformed into an recursive function inside lib.
-	for _, quote := range parsedQuotes.Data {
-		firstSlice := strings.Split(quote.Quote, " ")
-
-		for _, firstFilter := range firstSlice {
-			secondSlice := strings.Split(firstFilter, ",")
-
-			for _, secondFilter := range secondSlice {
-				thirdSlice := strings.Split(secondFilter, "!")
-
-				for _, thirdFilter := range thirdSlice {
-					filteredWord := strings.Split(thirdFilter, ".")
-
-					// After all the filters are applied the filtered word is compared with the word that is been searched.
-					// If a match is found, the quote that the filtered word belongs to, is printed.
-					if filteredWord[0] == word {
-						quotesMatched = append(quotesMatched, quote)
-						matched = true
-					}
-				}
-			}
-		}
-	}
-
-	if matched {
-		err := writeJSON(w, quotesMatched)
+	if qs != nil {
+		err := writeJSON(w, qs)
 		if err != nil {
 			log.Fatal(err)
 		}
