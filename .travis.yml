@@ -6,6 +6,9 @@ notifications:
   email:
     on_success: never
 
+script:
+  - go test ./...
+
 before_deploy:
   - GOOS=linux GOARCH=amd64 go build -o restedancestor-linux-amd64
   #- GOOS=windows GOARCH=amd64 go build -o restedancestor-windows-amd64.exe
