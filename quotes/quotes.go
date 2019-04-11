@@ -37,9 +37,9 @@ type indexes []index
 
 // offsetQuoteFromWord find the index with a word in the slice and returns its offset
 func (i *indexes) offsetIndexFromWord(w string) (*int, error) {
-
+	Lower := strings.ToLower(w)
 	for k, idx := range *i {
-		if idx.Word == w {
+		if idx.Word == wLower {
 			return &k, nil
 		}
 	}

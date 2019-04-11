@@ -18,7 +18,7 @@
   ],
   "index": [
     {
-      "word": "Flame",
+      "word": "flame",
       "uuids": [
         "3d3bd030-74bf-4fcb-a0e0-b4dac38a688e",
         "b734d6af-df55-44a4-9537-95be28c45372"
@@ -28,12 +28,11 @@
       "word": "they",
       "uuids": [
         "3d3bd030-74bf-4fcb-a0e0-b4dac38a688e",
-        "b734d6af-df55-44a4-9537-95be28c45372",
         "b734d6af-df55-44a4-9537-95be28c45372"
       ]
     },
     {
-      "word": "Darkness",
+      "word": "darkness",
       "uuids": [
         "3d3bd030-74bf-4fcb-a0e0-b4dac38a688e",
         "7e1089ca-b080-4aeb-bfe6-7d52143137e6"
@@ -52,13 +51,13 @@
       ]
     },
     {
-      "word": "Terror",
+      "word": "terror",
       "uuids": [
         "7e1089ca-b080-4aeb-bfe6-7d52143137e6"
       ]
     },
     {
-      "word": "Madness",
+      "word": "madness",
       "uuids": [
         "7e1089ca-b080-4aeb-bfe6-7d52143137e6"
       ]
@@ -130,7 +129,7 @@
       ]
     },
     {
-      "word": "Chaos",
+      "word": "chaos",
       "uuids": [
         "b734d6af-df55-44a4-9537-95be28c45372"
       ]
@@ -138,7 +137,6 @@
     {
       "word": "will",
       "uuids": [
-        "b734d6af-df55-44a4-9537-95be28c45372",
         "b734d6af-df55-44a4-9537-95be28c45372"
       ]
     },
@@ -161,7 +159,7 @@
       ]
     },
     {
-      "word": "DOOMED",
+      "word": "doomed",
       "uuids": [
         "b734d6af-df55-44a4-9537-95be28c45372"
       ]

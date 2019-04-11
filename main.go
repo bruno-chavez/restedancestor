@@ -3,14 +3,17 @@ package main
 
 import (
 	"fmt"
-	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
 
 	"github.com/bruno-chavez/restedancestor/handlers"
+	"github.com/bvinc/go-sqlite-lite/sqlite3"
+	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
+	_, err1 := sqlite3.Open("mydatabase.db")
+	fmt.Println(err1)
 
 	// initiates router
 	router := httprouter.New()
