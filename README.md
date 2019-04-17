@@ -80,13 +80,6 @@ Content-Length: 67
 }
 ```
 
-##### OPTIONS:
-
-Responds with a header where it shows the available type request for that route
-```
-HTTP/1.1 200 OK
-Allow: GET,OPTIONS
-```
 
 ### `/search/{word}`
 
@@ -125,13 +118,6 @@ Content-Length: 99
 ]
 ```
 
-##### OPTIONS:
-
-Responds with a header where it shows the available type request for that route
-```
-HTTP/1.1 200 OK
-Allow: GET,OPTIONS
-```
 
 ### `/all`
 
@@ -160,13 +146,6 @@ Transfer-Encoding: chunked
 ]
 ```
 
-##### OPTIONS:
-
-Responds with a header where it shows the available type request for that route
-```
-HTTP/1.1 200 OK
-Allow: GET,OPTIONS
-```
 
 ### `/senile`
 
@@ -188,16 +167,9 @@ Content-Length: 134
 }
 ```
 
-##### OPTIONS:
-
-Responds with a header where it shows the available type request for that route
-```
-HTTP/1.1 200 OK
-Allow: GET,OPTIONS
-```
 
 
-### `/one/{uuid}`
+### `uuid/{uuid}/find`
 
 ##### GET:
 
@@ -216,15 +188,8 @@ Content-Length: 67
 }
 ```
 
-##### OPTIONS:
 
-Responds with a header where it shows the available type request for that route
-```
-HTTP/1.1 200 OK
-Allow: GET,OPTIONS
-```
-
-### `/top`
+### `uuid/top`
 
 ##### GET:
 
@@ -251,15 +216,7 @@ Transfer-Encoding: chunked
 ]
 ```
 
-##### OPTIONS:
-
-Responds with a header where it shows the available type request for that route
-```
-HTTP/1.1 200 OK
-Allow: GET,OPTIONS
-```
-
-### `/one/{uuid}/like`
+### `uuid/{uuid}/like`
 
 ##### PATCH:
 
@@ -271,15 +228,7 @@ Date: Mon, 04 Jun 2018 09:46:36 GMT
 Content-Length: 0
 ```
 
-##### `OPTIONS`
-
-Responds with a header where it shows the available type request for that route
-```
-HTTP/1.1 200 OK
-Allow: PATCH,OPTIONS
-```
-
-### `/one/{uuid}/dislike`
+### `uuid/{uuid}/dislike`
 
 ##### PATCH:
 
@@ -289,14 +238,6 @@ Responds with a Not Found Error in case the uuid is wrong, or an OK status if no
 HTTP/1.1 200 OK
 Date: Mon, 04 Jun 2018 09:46:36 GMT
 Content-Length: 0
-```
-
-##### OPTIONS:
-
-Responds with a header where it shows the available type request for that route
-```
-HTTP/1.1 200 OK
-Allow: PATCH,OPTIONS
 ```
 
 ## Notes
