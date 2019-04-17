@@ -1,58 +1,31 @@
-// Package main is the start of the API, creates all the routes and sets a handler for each one.
+// Package main is the start of the API, creates all the routes and sets a handlers for each one.
 package main
 
 import (
 	"fmt"
+	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
 
-	"github.com/bruno-chavez/restedancestor/handler"
-	"github.com/gorilla/mux"
+	"github.com/bruno-chavez/restedancestor/handlers"
 )
 
 func main() {
 
-	router := mux.NewRouter()
+	// initiates router
+	router := httprouter.New()
 
-	router.NewRoute().
-		Path("/random").
-		HandlerFunc(handler.RandomHandler).
-		Methods("GET", "OPTIONS")
+	// lists routes
+	router.GET("/random", handlers.Random)
+	router.GET("/all", handlers.All)
+	router.GET("/senile", handlers.Senile)
+	router.GET("/search/:word", handlers.Search)
 
-	router.NewRoute().
-		Path("/all").
-		HandlerFunc(handler.AllHandler).
-		Methods("GET", "OPTIONS")
-
-	router.NewRoute().
-		Path("/search/{word}").
-		HandlerFunc(handler.SearchHandler).
-		Methods("GET", "OPTIONS")
-
-	router.NewRoute().
-		Path("/one/{uuid}").
-		HandlerFunc(handler.OneHandler).
-		Methods("GET", "OPTIONS")
-
-	router.NewRoute().
-		Path("/top").
-		HandlerFunc(handler.TopHandler).
-		Methods("GET", "OPTIONS")
-
-	router.NewRoute().
-		Path("/one/{uuid}/dislike").
-		HandlerFunc(handler.DislikeHandler).
-		Methods("PATCH", "OPTIONS")
-
-	router.NewRoute().
-		Path("/one/{uuid}/like").
-		HandlerFunc(handler.LikeHandler).
-		Methods("PATCH", "OPTIONS")
-
-	router.NewRoute().
-		Path("/senile").
-		HandlerFunc(handler.SenileHandler).
-		Methods("GET", "OPTIONS")
+	//uuid routes
+	router.GET("/uuid/:uuid/find", handlers.Find)
+	router.POST("/uuid/:uuid/like", handlers.Like)
+	router.POST("/uuid/:uuid/dislike", handlers.Dislike)
+	router.GET("/uuid/top", handlers.Top)
 
 	fmt.Println("Welcome to restedancestor, the API is running in a maddening fashion!")
 	fmt.Println("The Ancestor is waiting and listening on localhost:8080")
