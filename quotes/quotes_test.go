@@ -155,24 +155,22 @@ func TestDislikeQuote(t *testing.T) {
 
 func TestIndex(t *testing.T) {
 	originalQuotes := quotes
-	// originalIndexes := originalQuotes.Indexes
+	originalIndexes := originalQuotes.Indexes
 
 	workingQuotes := quotes
-	workingQuotes.Indexes = make(indexes, 0)
-
 	workingQuotes.Index(db)
+	workingIndexes := workingQuotes.Indexes
 
-	if len(workingQuotes.Indexes) != len(originalQuotes.Indexes) {
-		t.Errorf("Quotes Lengths aren't equals")
+	if len(workingIndexes) != len(originalIndexes) {
+		t.Errorf("Quotes Lengths aren't equals, %d <> %d", len(workingIndexes), len(originalIndexes))
 	}
 
-	// workingIndexes := workingQuotes.Indexes
-
-	// for i, _ := range originalQuotes.Indexes {
-	// 	if originalIndexes[i] != workingIndexes[i] {
-	// 		t.Errorf("For # %d, %s and %s are different", i, originalIndexes[i], workingIndexes[i])
-	// 	}
-	// }
+	for i, workingIndex := range originalIndexes {
+		originalIndex := originalIndexes[i]
+		if len(workingIndex.Uuids) != len(originalIndex.Uuids) {
+			t.Errorf("For # %d, %s and %s are different", i, originalIndexes[i], workingIndexes[i])
+		}
+	}
 }
 
 func TestListFilled(t *testing.T) {

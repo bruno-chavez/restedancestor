@@ -38,7 +38,6 @@ func All(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 // Search takes care of the /search/{word} route.
 func Search(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 	word := strings.ToLower(p.ByName("word"))
-	matched := false
 	qs := parsedQuotes.List(word)
 
 	if len(qs) != 0 {

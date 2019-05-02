@@ -103,7 +103,7 @@ func (q Quotes) Less(i int, j int) bool {
 }
 
 // Parser fetches from database.json and puts it on a struct.
-func Parser(data database.Database) Quotes {
+func Parser(data database.Storage) Quotes {
 	q := Quotes{}
 	err := json.Unmarshal(data.Read(), &q)
 	if err != nil {
@@ -114,7 +114,7 @@ func Parser(data database.Database) Quotes {
 }
 
 // LikeQuote increments the score of the quote
-func (q Quotes) LikeQuote(db database.Database, uuid string) {
+func (q Quotes) LikeQuote(db database.Storage, uuid string) {
 	offset, _ := q.OffsetQuoteFromUUID(uuid)
 	q.Data[*offset].Score++
 
@@ -124,7 +124,7 @@ func (q Quotes) LikeQuote(db database.Database, uuid string) {
 }
 
 // DislikeQuote decrements the score of the quote
-func (q Quotes) DislikeQuote(db database.Database, uuid string) {
+func (q Quotes) DislikeQuote(db database.Storage, uuid string) {
 	offset, _ := q.OffsetQuoteFromUUID(uuid)
 	q.Data[*offset].Score--
 
@@ -145,7 +145,7 @@ func (q Quotes) OffsetQuoteFromUUID(uuid string) (*int, error) {
 }
 
 // Index indexes all the data
-func (q Quotes) Index(db database.Database) {
+func (q Quotes) Index(db database.Storage) {
 	q.Indexes = make(indexes, 0)
 	const limitSize = 3
 	for _, quote := range q.Data {
@@ -185,7 +185,7 @@ func (q Quotes) List(w string) []QuoteType {
 }
 
 // unparser writes a slice into database.
-func unparser(db database.Database, quotes Quotes) error {
+func unparser(db database.Storage, quotes Quotes) error {
 	writeJSON, err := json.MarshalIndent(quotes, "", "  ")
 	if err != nil {
 		log.Fatal(err)

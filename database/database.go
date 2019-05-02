@@ -7,8 +7,8 @@ import (
 	"os"
 )
 
-// Database describes accesses to a storage
-type Database interface {
+// Storage describes accesses to a storage
+type Storage interface {
 	Read() []byte
 	Write([]byte) error
 }
