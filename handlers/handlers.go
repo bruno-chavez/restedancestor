@@ -41,7 +41,7 @@ func Search(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 	matched := false
 	qs := parsedQuotes.List(word)
 
-	if qs != nil {
+	if len(qs) != 0 {
 		err := writeJSON(w, qs)
 		if err != nil {
 			log.Fatal(err)

@@ -37,7 +37,7 @@ type indexes []index
 
 // offsetQuoteFromWord find the index with a word in the slice and returns its offset
 func (i *indexes) offsetIndexFromWord(w string) (*int, error) {
-	Lower := strings.ToLower(w)
+	wLower := strings.ToLower(w)
 	for k, idx := range *i {
 		if idx.Word == wLower {
 			return &k, nil
@@ -163,17 +163,17 @@ func (q Quotes) Index(db database.Database) {
 			}
 		}
 	}
+
 	unparser(db, q)
 }
 
 // List returns all quotes containing a word
-func (q Quotes) List(w string) *[]QuoteType {
+func (q Quotes) List(w string) []QuoteType {
+	qt := make([]QuoteType, 0)
 	k, err := q.Indexes.offsetIndexFromWord(w)
 	if err != nil {
-		return nil
+		return qt
 	}
-
-	qt := make([]QuoteType, 0)
 
 	for _, u := range q.Indexes[*k].Uuids {
 		j, _ := q.OffsetQuoteFromUUID(u.String())
@@ -181,7 +181,7 @@ func (q Quotes) List(w string) *[]QuoteType {
 		qt = append(qt, quote)
 	}
 
-	return &qt
+	return qt
 }
 
 // unparser writes a slice into database.

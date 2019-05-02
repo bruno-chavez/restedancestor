@@ -7,19 +7,46 @@ import (
 type DataDouble struct{}
 
 var raw = `{
-    "data" : [
-      {
-        "quote": "There is a place, beneath those ancient ruins, in the moor, that calls out to the boldest among them...",
-        "uuid": "240f6e4e-3f28-4876-9ece-c88599c15c78",
-        "score": 0
-      },
-      {
-        "quote": "'We are the Flame!', they cry, 'And Darkness fears us!'",
-        "uuid": "3d3bd030-74bf-4fcb-a0e0-b4dac38a688e",
-        "score": 0
-      }
-    ]
-  }`
+  "data": [
+    {
+      "quote": "beneath those ancient ruins,...",
+      "uuid": "240f6e4e-3f28-4876-9ece-c88599c15c78",
+      "score": 0
+    },
+    {
+      "quote": "'We are the Ruins!'",
+      "uuid": "3d3bd030-74bf-4fcb-a0e0-b4dac38a688e",
+      "score": 0
+    }
+  ],
+  "index": [
+    {
+      "word": "beneath",
+      "uuids": [
+        "240f6e4e-3f28-4876-9ece-c88599c15c78"
+      ]
+    },
+    {
+      "word": "those",
+      "uuids": [
+        "240f6e4e-3f28-4876-9ece-c88599c15c78"
+      ]
+    },
+    {
+      "word": "ancient",
+      "uuids": [
+        "240f6e4e-3f28-4876-9ece-c88599c15c78"
+      ]
+    },
+    {
+      "word": "ruins",
+      "uuids": [
+        "240f6e4e-3f28-4876-9ece-c88599c15c78",
+        "3d3bd030-74bf-4fcb-a0e0-b4dac38a688e"
+      ]
+    }
+  ]
+}`
 
 // Read provides in-memory data
 func (d DataDouble) Read() []byte {
@@ -123,5 +150,43 @@ func TestDislikeQuote(t *testing.T) {
 
 	if originalQuote.Score-1 != newQuote.Score {
 		t.Errorf("New score isn't equal to original score - 1")
+	}
+}
+
+func TestIndex(t *testing.T) {
+	originalQuotes := quotes
+	// originalIndexes := originalQuotes.Indexes
+
+	workingQuotes := quotes
+	workingQuotes.Indexes = make(indexes, 0)
+
+	workingQuotes.Index(db)
+
+	if len(workingQuotes.Indexes) != len(originalQuotes.Indexes) {
+		t.Errorf("Quotes Lengths aren't equals")
+	}
+
+	// workingIndexes := workingQuotes.Indexes
+
+	// for i, _ := range originalQuotes.Indexes {
+	// 	if originalIndexes[i] != workingIndexes[i] {
+	// 		t.Errorf("For # %d, %s and %s are different", i, originalIndexes[i], workingIndexes[i])
+	// 	}
+	// }
+}
+
+func TestListFilled(t *testing.T) {
+	list := quotes.List("ruins")
+
+	if len(list) != 2 {
+		t.Errorf("ruins wasn't found in %d documents", len(list))
+	}
+}
+
+func TestListEmpty(t *testing.T) {
+	list := quotes.List("dfzefzer")
+
+	if len(list) != 0 {
+		t.Errorf("random text was found in documents")
 	}
 }
