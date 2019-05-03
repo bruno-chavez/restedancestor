@@ -17,6 +17,7 @@ const nbTop = 5
 // parsedQuotes is a global variable to avoid multiple calls to Parser since always returns the same parsedQuotes.
 var db = &database.File{}
 var parsedQuotes = quotes.Parser(*db)
+var repo = quotes.NewRepository(database.NewDb())
 
 // Random takes care of the 'random' route.
 func Random(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
@@ -28,8 +29,8 @@ func Random(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 
 // All takes care of the 'all' route.
 func All(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	parsedQuotes.Index(db)
-	err := writeJSON(w, parsedQuotes)
+	// parsedQuotes.Index(db)
+	err := writeJSON(w, repo.All())
 	if err != nil {
 		log.Fatal(err)
 	}
