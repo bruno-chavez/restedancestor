@@ -99,16 +99,13 @@ func Find(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 func Like(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 	uuidToSearch := p.ByName("uuid")
 
-	if _, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch); err != nil {
+	if err := repo.IncrementsScore(uuidToSearch); err != nil {
 		err = writeNotFound(w, uuidToSearch)
 		if err != nil {
 			log.Fatal(err)
 		}
 		return
 	}
-
-	parsedQuotes.LikeQuote(db, uuidToSearch)
-
 }
 
 // Dislike takes care of the /one/{UUID}/dislike route.

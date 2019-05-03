@@ -1,6 +1,7 @@
 package quotes
 
 import (
+	"errors"
 	"log"
 
 	"github.com/bruno-chavez/restedancestor/database"
@@ -84,4 +85,19 @@ func buildSliceFromData(stmt database.Stmt) []QuoteType {
 	}
 
 	return quotes
+}
+
+func (r Repository) IncrementsScore(u string) error {
+	stmt, err := r.db.Prepare(`UPDATE quotes SET score = score+1
+        WHERE uuid = ?`, u)
+	if err != nil {
+		return errors.New("Failed to prepare :" + err.Error())
+	}
+	defer stmt.Close()
+
+	if err = stmt.Exec(u); err != nil {
+		return errors.New("Failed to exec SQL :" + err.Error())
+	}
+
+	return nil
 }

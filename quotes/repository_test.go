@@ -1,7 +1,7 @@
 package quotes
 
 import (
-	// "errors"
+	"errors"
 	"testing"
 
 	"github.com/bruno-chavez/restedancestor/database"
@@ -67,5 +67,22 @@ func TestFindByUUIDKO(t *testing.T) {
 	q := repo.FindByUUID("unknown")
 	if q != nil {
 		t.Error("There's quote with this uuid")
+	}
+}
+
+func TestIncrementsScoreKO(t *testing.T) {
+	step = 1
+	exec = errors.New("")
+
+	if err := repo.IncrementsScore("unknown"); err == nil {
+		t.Error("Score incrementation succeed")
+	}
+}
+
+func TestIncrementsScoreOK(t *testing.T) {
+	step = 1
+	exec = nil
+	if err := repo.IncrementsScore("known"); err != nil {
+		t.Error("Score incrementation failed")
 	}
 }
