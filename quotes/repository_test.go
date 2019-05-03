@@ -86,3 +86,20 @@ func TestIncrementsScoreOK(t *testing.T) {
 		t.Error("Score incrementation failed")
 	}
 }
+
+func TestDecrementsScoreKO(t *testing.T) {
+	step = 1
+	exec = errors.New("")
+
+	if err := repo.DecrementsScore("unknown"); err == nil {
+		t.Error("Score decrementation succeed")
+	}
+}
+
+func TestDecrementsScoreOK(t *testing.T) {
+	step = 1
+	exec = nil
+	if err := repo.DecrementsScore("known"); err != nil {
+		t.Error("Score decrementation failed")
+	}
+}

@@ -101,3 +101,20 @@ func (r Repository) IncrementsScore(u string) error {
 
 	return nil
 }
+
+// @TODO : check existence, error message
+func (r Repository) DecrementsScore(u string) error {
+	stmt, err := r.db.Prepare(`UPDATE quotes SET score = score-1
+        WHERE uuid = ?`, u)
+	if err != nil {
+		return errors.New("Failed to prepare :" + err.Error())
+	}
+	defer stmt.Close()
+
+	if err = stmt.Exec(u); err != nil {
+		return errors.New("Failed to exec SQL :" + err.Error())
+	}
+
+	return nil
+}
+

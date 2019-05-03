@@ -112,16 +112,13 @@ func Like(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 func Dislike(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 	uuidToSearch := p.ByName("uuid")
 
-	if _, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch); err != nil {
+	if err := repo.DecrementsScore(uuidToSearch); err != nil {
 		err = writeNotFound(w, uuidToSearch)
 		if err != nil {
 			log.Fatal(err)
 		}
 		return
 	}
-
-	parsedQuotes.DislikeQuote(db, uuidToSearch)
-
 }
 
 // Top takes care of the /top route.
