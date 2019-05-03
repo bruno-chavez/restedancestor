@@ -11,11 +11,6 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-const nbTop = 5
-
-// parsedQuotes is a global variable to avoid multiple calls to Parser since always returns the same parsedQuotes.
-var db = &database.File{}
-var parsedQuotes = quotes.Parser(*db)
 var repo = quotes.NewRepository(database.NewDb())
 
 // Random takes care of the 'random' route.

@@ -53,9 +53,22 @@ func (r Repository) All() []QuoteType {
 	return buildSliceFromData(stmt)
 }
 
+func (r Repository) AllByWord(w string) []QuoteType {
+	stmt, err := r.db.Prepare(`SELECT DISTINCT q.id_quote, content, score, uuid
+        FROM indexes i INNER JOIN indexes_quotes iq ON i.id_index = iq.id_index INNER JOIN quotes q ON iq.id_quote = q.id_quote
+        WHERE word = ?
+        ORDER BY q.id_quote`, w)
+	if err != nil {
+		log.Fatal("Malformed SQL :" + err.Error())
+	}
+	defer stmt.Close()
+
+	return buildSliceFromData(stmt)
+}
+
 // FindByUUID returns one quote, given its UUID
 func (r Repository) FindByUUID(u string) *QuoteType {
-	stmt, err := r.Db.Prepare(`SELECT id_quote content, score, uuid
+	stmt, err := r.db.Prepare(`SELECT id_quote, content, score, uuid
         FROM quotes
         WHERE uuid = ?`, u)
 
@@ -74,7 +87,7 @@ func (r Repository) FindByUUID(u string) *QuoteType {
 
 // Prefered returns 5 prefered quotes
 func (r Repository) Prefered() []QuoteType {
-	stmt, err := r.Db.Prepare(`SELECT id_quote, content, score, uuid
+	stmt, err := r.db.Prepare(`SELECT id_quote, content, score, uuid
         FROM quotes
         ORDER BY score DESC
         LIMIT 5`)
@@ -176,7 +189,7 @@ func (r Repository) Index(q QuoteType) {
 
 func (r Repository) storeIndex(w string, i int) {
 	idWord := r.getIndexIDFromWord(w)
-	stmt, err := r.Db.Prepare(`INSERT INTO indexes_quotes
+	stmt, err := r.db.Prepare(`INSERT INTO indexes_quotes
         (id_index, id_quote) VALUES (?, ?)`)
 	if err != nil {
 		log.Fatal("Malformed SQL :" + err.Error())
@@ -192,7 +205,7 @@ func (r Repository) storeIndex(w string, i int) {
 
 func (r Repository) getIndexIDFromWord(w string) int64 {
 	// log.Fatal(w)
-	stmt, err := r.Db.Prepare(`SELECT id_index
+	stmt, err := r.db.Prepare(`SELECT id_index
         FROM indexes
         WHERE word = ?
         LIMIT 1`, w)
@@ -219,7 +232,7 @@ func (r Repository) getIndexIDFromWord(w string) int64 {
 }
 
 func (r Repository) setIndexIDFromWord(w string) int64 {
-	stmt, err := r.Db.Prepare(`INSERT INTO indexes
+	stmt, err := r.db.Prepare(`INSERT INTO indexes
         (word) VALUES (?)`)
 	if err != nil {
 		log.Fatal("Malformed SQL :" + err.Error())
@@ -234,7 +247,5 @@ func (r Repository) setIndexIDFromWord(w string) int64 {
 
 	// log.Fatal("Fatal :", r.Db.LastInsertRowID())
 
-	return r.Db.LastInsertRowID()
+	return r.db.LastInsertRowID()
 }
-// FindByWord()
-// Index()
