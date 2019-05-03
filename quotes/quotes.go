@@ -71,6 +71,7 @@ func (i *indexes) setIndex(w string, u uuid.UUID) {
 
 // QuoteType describes a quote.
 type QuoteType struct {
+	ID    int
 	Quote string    `json:"quote"`
 	Uuid  uuid.UUID `json:"uuid"`
 	Score int       `json:"score"`

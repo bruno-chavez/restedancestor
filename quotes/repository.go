@@ -21,7 +21,7 @@ type Repository struct {
 
 // Random returns one quote, randomly
 func (r Repository) Random() *QuoteType {
-	stmt, err := r.db.Prepare(`SELECT content, score, uuid
+	stmt, err := r.Db.Prepare(`SELECT id_quote, content, score, uuid
         FROM quotes
         ORDER BY RANDOM()
         LIMIT 1`)
@@ -41,7 +41,7 @@ func (r Repository) Random() *QuoteType {
 
 // All returns all quotes
 func (r Repository) All() []QuoteType {
-	stmt, err := r.db.Prepare(`SELECT content, score, uuid
+	stmt, err := r.Db.Prepare(`SELECT id_quote, content, score, uuid
         FROM quotes
         ORDER BY id_quote`)
 	if err != nil {
@@ -54,7 +54,7 @@ func (r Repository) All() []QuoteType {
 
 // FindByUUID returns one quote, given its UUID
 func (r Repository) FindByUUID(u string) *QuoteType {
-	stmt, err := r.db.Prepare(`SELECT content, score, uuid
+	stmt, err := r.Db.Prepare(`SELECT id_quote content, score, uuid
         FROM quotes
         WHERE uuid = ?`, u)
 
@@ -73,7 +73,7 @@ func (r Repository) FindByUUID(u string) *QuoteType {
 
 // Prefered returns 5 prefered quotes
 func (r Repository) Prefered() []QuoteType {
-	stmt, err := r.db.Prepare(`SELECT content, score, uuid
+	stmt, err := r.Db.Prepare(`SELECT id_quote, content, score, uuid
         FROM quotes
         ORDER BY score DESC
         LIMIT 5`)
@@ -152,6 +152,87 @@ func (r Repository) DecrementsScore(u string) error {
 	return nil
 }
 
+func (r Repository) Index(q QuoteType) {
+	const limitSize = 3
+
+	words := strings.FieldsFunc(q.Quote, func(r rune) bool {
+		switch r {
+		case '\'', '!', ',', '.', '-', '…', ' ':
+			return true
+		}
+		return false
+	})
+	for _, w := range words {
+		wLower := strings.ToLower(w)
+		if len(wLower) > limitSize {
+			r.storeIndex(wLower, q.ID)
+			log.Println("Store :", wLower, q.ID)
+		}
+	}
+}
+
+func (r Repository) storeIndex(w string, i int) {
+	idWord := r.getIndexIDFromWord(w)
+	stmt, err := r.Db.Prepare(`INSERT INTO indexes_quotes
+        (id_index, id_quote) VALUES (?, ?)`)
+	if err != nil {
+		log.Fatal("Malformed SQL :" + err.Error())
+	}
+	defer stmt.Close()
+
+	err = stmt.Exec(idWord, i)
+
+	if err != nil {
+		log.Fatal("Failed to exec SQL :" + err.Error())
+	}
+}
+
+func (r Repository) getIndexIDFromWord(w string) int64 {
+	// log.Fatal(w)
+	stmt, err := r.Db.Prepare(`SELECT id_index
+        FROM indexes
+        WHERE word = ?
+        LIMIT 1`, w)
+
+	if err != nil {
+		log.Fatal("Malformed SQL :" + err.Error())
+	}
+	defer stmt.Close()
+
+	hasRow, err := stmt.Step()
+	if err != nil {
+		log.Fatal("Step gave error :" + err.Error())
+	}
+	if !hasRow {
+		return r.setIndexIDFromWord(w)
+	}
+
+	var idIndex int64
+	err = stmt.Scan(&idIndex)
+	if err != nil {
+		log.Fatal("Scan gave error :" + err.Error())
+	}
+	return idIndex
+}
+
+func (r Repository) setIndexIDFromWord(w string) int64 {
+	stmt, err := r.Db.Prepare(`INSERT INTO indexes
+        (word) VALUES (?)`)
+	if err != nil {
+		log.Fatal("Malformed SQL :" + err.Error())
+	}
+	defer stmt.Close()
+
+	err = stmt.Exec(w)
+
+	if err != nil {
+		log.Fatal("Failed to exec SQL :" + err.Error())
+	}
+
+	// log.Fatal("Fatal :", r.Db.LastInsertRowID())
+
+	return r.Db.LastInsertRowID()
+}
 // FindByWord()
 // Index()
 // Random()

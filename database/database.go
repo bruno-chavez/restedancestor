@@ -49,6 +49,7 @@ func (f File) path() string {
 // Database describes accesses to a storage
 type Database interface {
 	Prepare(string, ...interface{}) (Stmt, error)
+	LastInsertRowID() int64
 }
 
 // Db represents a connection to the storage
@@ -59,6 +60,10 @@ type Db struct {
 // Prepare encapsulates the inner connection for testability
 func (d Db) Prepare(sql string, args ...interface{}) (Stmt, error) {
 	return d.sqlite.Prepare(sql, args...)
+}
+
+func (d Db) LastInsertRowID() int64 {
+	return d.sqlite.LastInsertRowID()
 }
 
 // Stmt represents a query statement

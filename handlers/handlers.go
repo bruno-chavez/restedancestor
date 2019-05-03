@@ -29,7 +29,6 @@ func Random(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 
 // All takes care of the 'all' route.
 func All(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	// parsedQuotes.Index(db)
 	err := writeJSON(w, repo.All())
 	if err != nil {
 		log.Fatal(err)
