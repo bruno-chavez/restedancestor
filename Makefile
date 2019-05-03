@@ -6,5 +6,8 @@ test:
 hard-lint:
 	gometalinter --enable-all -D lll -t --sort=severity ./...
 
-install:
+install: get-missing
 	go install ./...
+
+get-missing:
+	go get -d ./...

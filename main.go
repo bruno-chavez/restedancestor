@@ -12,9 +12,6 @@ import (
 )
 
 func main() {
-	_, err1 := sqlite3.Open("mydatabase.db")
-	fmt.Println(err1)
-
 	// initiates router
 	router := httprouter.New()
 

@@ -7,14 +7,18 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+// NewRepository initialises a new repo, for interacting with storage
 func NewRepository(db database.Database) Repository {
 	return Repository{db}
 }
 
+// Repository represents a storage abstraction
+// Cf. https://www.martinfowler.com/eaaCatalog/repository.html
 type Repository struct {
 	db database.Database
 }
 
+// All returns all quotes
 func (r Repository) All() []QuoteType {
 	stmt, err := r.db.Prepare(`SELECT content, score, uuid
         FROM quotes
@@ -49,10 +53,7 @@ func buildSliceFromData(stmt database.Stmt) []QuoteType {
 		}
 
 		// Parsing UUID from string input
-		u2, err := uuid.FromString(u)
-		if err != nil {
-			log.Fatalf("Fail to parse : %s", u)
-		}
+		u2, _ := uuid.FromString(u)
 		q := QuoteType{
 			Quote: c,
 			Uuid:  u2,
