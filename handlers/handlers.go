@@ -80,17 +80,16 @@ func Senile(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 func Find(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 	uuidToSearch := p.ByName("uuid")
 
-	offset, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch)
-	if err != nil {
-		err = writeNotFound(w, uuidToSearch)
+	q := repo.FindByUUID(uuidToSearch)
+	if q == nil {
+		err := writeNotFound(w, uuidToSearch)
 		if err != nil {
 			log.Fatal(err)
 		}
 		return
 	}
 
-	quotes := parsedQuotes.Data
-	err = writeJSON(w, quotes[*offset])
+	err := writeJSON(w, q)
 	if err != nil {
 		log.Fatal(err)
 	}

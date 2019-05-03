@@ -40,16 +40,32 @@ var repo = NewRepository(DbDouble{})
 
 func TestAllOK(t *testing.T) {
 	step = 1
-	ps := repo.All()
-	if len(ps) != 1 {
+	qs := repo.All()
+	if len(qs) != 1 {
 		t.Error("No quote")
 	}
 }
 
 func TestAllKO(t *testing.T) {
 	step = 3
-	ps := repo.All()
-	if len(ps) != 0 {
+	qs := repo.All()
+	if len(qs) != 0 {
 		t.Error("There's quotes")
+	}
+}
+
+func TestFindByUUIDOK(t *testing.T) {
+	step = 1
+	q := repo.FindByUUID("known")
+	if q == nil {
+		t.Error("No quote with this uuid")
+	}
+}
+
+func TestFindByUUIDKO(t *testing.T) {
+	step = 3
+	q := repo.FindByUUID("unknown")
+	if q != nil {
+		t.Error("There's quote with this uuid")
 	}
 }

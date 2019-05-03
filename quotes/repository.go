@@ -30,6 +30,26 @@ func (r Repository) All() []QuoteType {
 
 	return buildSliceFromData(stmt)
 }
+
+// FindByUUID returns one quote, given its UUID
+func (r Repository) FindByUUID(u string) *QuoteType {
+	stmt, err := r.db.Prepare(`SELECT content, score, uuid
+        FROM quotes
+        WHERE uuid = ?`, u)
+
+	if err != nil {
+		log.Fatal("Malformed SQL :" + err.Error())
+	}
+	defer stmt.Close()
+
+	slice := buildSliceFromData(stmt)
+	if len(slice) == 0 {
+		return nil
+	}
+
+	return &slice[0]
+}
+
 func buildSliceFromData(stmt database.Stmt) []QuoteType {
 	quotes := make([]QuoteType, 0)
 
