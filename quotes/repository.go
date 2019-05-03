@@ -53,6 +53,7 @@ func (r Repository) All() []QuoteType {
 	return buildSliceFromData(stmt)
 }
 
+// AllByWord returns all quotes containing a specific word
 func (r Repository) AllByWord(w string) []QuoteType {
 	stmt, err := r.db.Prepare(`SELECT DISTINCT q.id_quote, content, score, uuid
         FROM indexes i INNER JOIN indexes_quotes iq ON i.id_index = iq.id_index INNER JOIN quotes q ON iq.id_quote = q.id_quote
@@ -115,7 +116,6 @@ func buildSliceFromData(stmt database.Stmt) []QuoteType {
 		var c string
 		var s int
 		var u string
-		// q := QuoteType{}
 
 		err = stmt.Scan(&i, &c, &s, &u)
 		if err != nil {
@@ -168,6 +168,9 @@ func (r Repository) DecrementsScore(u string) error {
 	return nil
 }
 
+// ----------
+// Methods kept for indexation purpose
+
 func (r Repository) Index(q QuoteType) {
 	const limitSize = 3
 
@@ -204,7 +207,6 @@ func (r Repository) storeIndex(w string, i int) {
 }
 
 func (r Repository) getIndexIDFromWord(w string) int64 {
-	// log.Fatal(w)
 	stmt, err := r.db.Prepare(`SELECT id_index
         FROM indexes
         WHERE word = ?
@@ -244,8 +246,6 @@ func (r Repository) setIndexIDFromWord(w string) int64 {
 	if err != nil {
 		log.Fatal("Failed to exec SQL :" + err.Error())
 	}
-
-	// log.Fatal("Fatal :", r.Db.LastInsertRowID())
 
 	return r.db.LastInsertRowID()
 }

@@ -40,7 +40,7 @@ func stringModifier(minQuote []string, maxQuote []string) string {
 func writeJSON(w http.ResponseWriter, data interface{}) error {
 	w.Header().Set("Content-Type", "application/json")
 
-	marshaledData, err := json.Marshal(data)
+	marshaledData, err := json.MarshalIndent(data, "", " ")
 	if err != nil {
 		return err
 	}

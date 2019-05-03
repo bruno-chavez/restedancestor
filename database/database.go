@@ -3,6 +3,7 @@ package database
 
 import (
 	"log"
+	"os"
 	"time"
 
 	"github.com/bvinc/go-sqlite-lite/sqlite3"
@@ -39,7 +40,8 @@ type Stmt interface {
 
 // NewDb initialise a new connection
 func NewDb() Database {
-	s, err := sqlite3.Open("./database/database.db")
+	p := "/src/github.com/bruno-chavez/restedancestor/database/database.db"
+	s, err := sqlite3.Open(os.Getenv("GOPATH") + p)
 	if err != nil {
 		log.Fatal(err)
 	}

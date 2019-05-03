@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"github.com/bruno-chavez/restedancestor/handlers"
-	"github.com/bvinc/go-sqlite-lite/sqlite3"
 	"github.com/julienschmidt/httprouter"
 )
 
