@@ -88,20 +88,6 @@ func (q Quotes) Random() QuoteType {
 	return qd[rand.Intn(len(qd))]
 }
 
-func (q Quotes) Len() int {
-	return len(q.Data)
-}
-
-func (q Quotes) Swap(i int, j int) {
-	qd := q.Data
-	qd[i], qd[j] = qd[j], qd[i]
-}
-
-func (q Quotes) Less(i int, j int) bool {
-	qd := q.Data
-	return qd[i].Score > qd[j].Score
-}
-
 // Parser fetches from database.json and puts it on a struct.
 func Parser(data database.Storage) Quotes {
 	q := Quotes{}
@@ -111,26 +97,6 @@ func Parser(data database.Storage) Quotes {
 	}
 
 	return q
-}
-
-// LikeQuote increments the score of the quote
-func (q Quotes) LikeQuote(db database.Storage, uuid string) {
-	offset, _ := q.OffsetQuoteFromUUID(uuid)
-	q.Data[*offset].Score++
-
-	if err := unparser(db, q); err != nil {
-		log.Fatal(err)
-	}
-}
-
-// DislikeQuote decrements the score of the quote
-func (q Quotes) DislikeQuote(db database.Storage, uuid string) {
-	offset, _ := q.OffsetQuoteFromUUID(uuid)
-	q.Data[*offset].Score--
-
-	if err := unparser(db, q); err != nil {
-		log.Fatal(err)
-	}
 }
 
 // OffsetQuoteFromUUID find the uuid in the slice and returns its offset

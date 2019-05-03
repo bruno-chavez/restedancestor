@@ -51,6 +51,20 @@ func (r Repository) FindByUUID(u string) *QuoteType {
 	return &slice[0]
 }
 
+// Prefered returns 5 prefered quotes
+func (r Repository) Prefered() []QuoteType {
+	stmt, err := r.db.Prepare(`SELECT content, score, uuid
+        FROM quotes
+        ORDER BY score DESC
+        LIMIT 5`)
+	if err != nil {
+		log.Fatal("Malformed SQL :" + err.Error())
+	}
+	defer stmt.Close()
+
+	return buildSliceFromData(stmt)
+}
+
 func buildSliceFromData(stmt database.Stmt) []QuoteType {
 	quotes := make([]QuoteType, 0)
 
@@ -118,3 +132,6 @@ func (r Repository) DecrementsScore(u string) error {
 	return nil
 }
 
+// FindByWord()
+// Index()
+// Random()

@@ -4,7 +4,6 @@ package handlers
 import (
 	"log"
 	"net/http"
-	"sort"
 	"strings"
 
 	"github.com/bruno-chavez/restedancestor/database"
@@ -123,19 +122,7 @@ func Dislike(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 
 // Top takes care of the /top route.
 func Top(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	sort.Sort(parsedQuotes)
-
-	i := 0
-	top := make([]quotes.QuoteType, 0)
-	for _, quote := range parsedQuotes.Data {
-		if i >= nbTop {
-			break
-		}
-		top = append(top, quote)
-		i++
-	}
-
-	err := writeJSON(w, top)
+	err := writeJSON(w, repo.Prefered())
 	if err != nil {
 		log.Fatal(err)
 	}
