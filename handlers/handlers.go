@@ -38,7 +38,7 @@ func All(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 // Search takes care of the /search/{word} route.
 func Search(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 	word := strings.ToLower(p.ByName("word"))
-	qs := parsedQuotes.List(word)
+	qs := repo.AllByWord(word)
 
 	if len(qs) != 0 {
 		err := writeJSON(w, qs)
@@ -55,11 +55,11 @@ func Search(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 
 // Senile takes care of the 'senile' route
 func Senile(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	data := parsedQuotes.Random()
-	data1 := parsedQuotes.Random()
+	q1 := repo.Random()
+	q2 := repo.Random()
 
-	quoteArray := strings.Split(data.Quote, " ")
-	quoteArray1 := strings.Split(data1.Quote, " ")
+	quoteArray := strings.Split(q1.Quote, " ")
+	quoteArray1 := strings.Split(q2.Quote, " ")
 	var quote string
 
 	if len(quoteArray) < len(quoteArray1) {

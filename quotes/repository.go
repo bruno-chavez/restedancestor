@@ -3,6 +3,7 @@ package quotes
 import (
 	"errors"
 	"log"
+	"strings"
 
 	"github.com/bruno-chavez/restedancestor/database"
 	uuid "github.com/satori/go.uuid"
@@ -21,7 +22,7 @@ type Repository struct {
 
 // Random returns one quote, randomly
 func (r Repository) Random() *QuoteType {
-	stmt, err := r.Db.Prepare(`SELECT id_quote, content, score, uuid
+	stmt, err := r.db.Prepare(`SELECT id_quote, content, score, uuid
         FROM quotes
         ORDER BY RANDOM()
         LIMIT 1`)
@@ -41,7 +42,7 @@ func (r Repository) Random() *QuoteType {
 
 // All returns all quotes
 func (r Repository) All() []QuoteType {
-	stmt, err := r.Db.Prepare(`SELECT id_quote, content, score, uuid
+	stmt, err := r.db.Prepare(`SELECT id_quote, content, score, uuid
         FROM quotes
         ORDER BY id_quote`)
 	if err != nil {
@@ -97,12 +98,13 @@ func buildSliceFromData(stmt database.Stmt) []QuoteType {
 			break
 		}
 
+		var i int
 		var c string
 		var s int
 		var u string
 		// q := QuoteType{}
 
-		err = stmt.Scan(&c, &s, &u)
+		err = stmt.Scan(&i, &c, &s, &u)
 		if err != nil {
 			log.Fatal("Scan gave error :" + err.Error())
 		}
@@ -110,6 +112,7 @@ func buildSliceFromData(stmt database.Stmt) []QuoteType {
 		// Parsing UUID from string input
 		u2, _ := uuid.FromString(u)
 		q := QuoteType{
+			ID:    i,
 			Quote: c,
 			Uuid:  u2,
 			Score: s,
@@ -235,4 +238,3 @@ func (r Repository) setIndexIDFromWord(w string) int64 {
 }
 // FindByWord()
 // Index()
-// Random()

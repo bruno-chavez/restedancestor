@@ -15,6 +15,10 @@ func (d DbDouble) Prepare(sql string, args ...interface{}) (database.Stmt, error
 	return StmtDouble{}, nil
 }
 
+func (d DbDouble) LastInsertRowID() int64 {
+	return 0
+}
+
 func (s StmtDouble) Close() error {
 	return nil
 }
