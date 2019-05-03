@@ -23,8 +23,6 @@ After its downloaded run the executable and start making requests!
 Requires Go to be installed on your machine. You can install Go from
 [here](https://golang.org/doc/install).
 
-The [Gorilla mux](https://github.com/gorilla/mux) package is also needed if building from source, be sure to install it before installing `restedancestor`.
-
 Once installed, and with a correctly configured GOPATH, on a terminal type:
 
 ```
@@ -40,7 +38,7 @@ $GOPATH/src/github.com/bruno-chavez/restedancestor
 And last, on a terminal type:
 
 ```
-$ go install
+$ make install
 ```
 
 ##### Usage
@@ -74,6 +72,7 @@ Date: Mon, 04 Jun 2018 09:46:36 GMT
 Content-Length: 67
 
 {
+  "id": 9,
   "quote": "Towering. Fierce. Terrible. Nightmare made material.",
   "uuid": "8aa2653b-2a4a-48c9-b0e5-e221aa9237bd",
   "score": 0
@@ -87,7 +86,7 @@ Content-Length: 67
 
 Where {word} is the word that wants to be found in the database.
 
-For example requesting a GET methond on /search/prince will return a JSON body and a NotFoundStatus Header like this:
+For example requesting a GET method on /search/prince will return a JSON body and a NotFoundStatus Header like this:
 
 ```
 HTTP/1.1 404 Not Found
@@ -111,6 +110,7 @@ Content-Length: 99
 
 [
   {
+    "id": 3,
     "quote": "To prosecute our war against the swine, we must first scout their squalid homes.",
     "uuid": "9bc3e097-5a25-4cbd-80de-e2a77999e979",
     "score": 0
@@ -133,11 +133,13 @@ Transfer-Encoding: chunked
 
 [
   {
+    "id": 84,
     "quote": "Brigands have the run of these lanes, keep to the side path, the Hamlet is just ahead.",
     "uuid": "66d6ae53-c78f-4c31-9331-fdce84e29d57",
     "score": 0
   },
   {
+    "id": 10,
     "quote": "Dispatch this thug in brutal fashion, that all may hear of your arrival!",
     "uuid": "f8cabf02-0af1-43e7-ab19-e927ca02fa67",
     "score": 0
@@ -161,35 +163,14 @@ Date: Mon, 04 Jun 2018 09:46:36 GMT
 Content-Length: 134
 
 {
+  "id": 24,
   "quote": "invention! A spark without kindling is a goal without hope.",
   "uuid": "00000000-0000-0000-0000-000000000000",
   "score": 0
 }
 ```
 
-
-
-### `uuid/{uuid}/find`
-
-##### GET:
-
-Where {uuid} is the unique identifier of a quote, respondes with a JSON body with that quote in it.
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-Date: Mon, 04 Jun 2018 09:46:36 GMT
-Content-Length: 67
-
-{
-  "quote": "Towering. Fierce. Terrible. Nightmare made material.",
-  "uuid": "8aa2653b-2a4a-48c9-b0e5-e221aa9237bd",
-  "score": 0
-}
-```
-
-
-### `uuid/top`
+### `/top`
 
 ##### GET:
 
@@ -203,11 +184,13 @@ Transfer-Encoding: chunked
 
 [
   {
+    "id": 8,
     "quote": "Brigands have the run of these lanes, keep to the side path, the Hamlet is just ahead.",
     "uuid": "66d6ae53-c78f-4c31-9331-fdce84e29d57",
     "score": 18
   },
   {
+    "id": 15,
     "quote": "Dispatch this thug in brutal fashion, that all may hear of your arrival!",
     "uuid": "f8cabf02-0af1-43e7-ab19-e927ca02fa67",
     "score": 13
@@ -216,7 +199,27 @@ Transfer-Encoding: chunked
 ]
 ```
 
-### `uuid/{uuid}/like`
+### `/uuid/{uuid}/find`
+
+##### GET:
+
+Where {uuid} is the unique identifier of a quote, respondes with a JSON body with that quote in it.
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Mon, 04 Jun 2018 09:46:36 GMT
+Content-Length: 67
+
+{
+  "id": 5,
+  "quote": "Towering. Fierce. Terrible. Nightmare made material.",
+  "uuid": "8aa2653b-2a4a-48c9-b0e5-e221aa9237bd",
+  "score": 0
+}
+```
+
+### `/uuid/{uuid}/like`
 
 ##### PATCH:
 
@@ -228,7 +231,7 @@ Date: Mon, 04 Jun 2018 09:46:36 GMT
 Content-Length: 0
 ```
 
-### `uuid/{uuid}/dislike`
+### `/uuid/{uuid}/dislike`
 
 ##### PATCH:
 
@@ -251,7 +254,7 @@ Not supported for Windows.
 
 Sister project of [ancestorquotes](https://github.com/bruno-chavez/ancestorquotes).
 
-Current version: `0.5`
+Current version: `1.0`
 
 ## Contribute
 

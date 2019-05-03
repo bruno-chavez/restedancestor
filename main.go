@@ -19,12 +19,12 @@ func main() {
 	router.GET("/all", handlers.All)
 	router.GET("/senile", handlers.Senile)
 	router.GET("/search/:word", handlers.Search)
+	router.GET("/top", handlers.Top)
 
 	//uuid routes
 	router.GET("/uuid/:uuid/find", handlers.Find)
 	router.POST("/uuid/:uuid/like", handlers.Like)
 	router.POST("/uuid/:uuid/dislike", handlers.Dislike)
-	router.GET("/uuid/top", handlers.Top)
 
 	fmt.Println("Welcome to restedancestor, the API is running in a maddening fashion!")
 	fmt.Println("The Ancestor is waiting and listening on localhost:8080")
