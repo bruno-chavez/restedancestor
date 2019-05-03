@@ -25,6 +25,7 @@ func (d Db) Prepare(sql string, args ...interface{}) (Stmt, error) {
 	return d.sqlite.Prepare(sql, args...)
 }
 
+// LastInsertRowID encapsulates the inner return
 func (d Db) LastInsertRowID() int64 {
 	return d.sqlite.LastInsertRowID()
 }

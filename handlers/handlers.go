@@ -117,7 +117,7 @@ func Dislike(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 
 // Top takes care of the /top route.
 func Top(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	err := writeJSON(w, repo.Prefered())
+	err := writeJSON(w, repo.Preferred())
 	if err != nil {
 		log.Fatal(err)
 	}

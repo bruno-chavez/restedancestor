@@ -86,8 +86,8 @@ func (r Repository) FindByUUID(u string) *QuoteType {
 	return &slice[0]
 }
 
-// Prefered returns 5 prefered quotes
-func (r Repository) Prefered() []QuoteType {
+// Preferred returns 5 preferred quotes
+func (r Repository) Preferred() []QuoteType {
 	stmt, err := r.db.Prepare(`SELECT id_quote, content, score, uuid
         FROM quotes
         ORDER BY score DESC
@@ -127,7 +127,7 @@ func buildSliceFromData(stmt database.Stmt) []QuoteType {
 		q := QuoteType{
 			ID:    i,
 			Quote: c,
-			Uuid:  u2,
+			UUID:  u2,
 			Score: s,
 		}
 
@@ -171,7 +171,7 @@ func (r Repository) DecrementsScore(u string) error {
 // ----------
 // Methods kept for indexation purpose
 
-func (r Repository) Index(q QuoteType) {
+func (r Repository) index(q QuoteType) {
 	const limitSize = 3
 
 	words := strings.FieldsFunc(q.Quote, func(r rune) bool {

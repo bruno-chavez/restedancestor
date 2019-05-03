@@ -1,4 +1,4 @@
-all: test hard-lint install
+all: install test hard-lint
 
 test:
 	go test ./...

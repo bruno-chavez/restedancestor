@@ -90,19 +90,19 @@ func TestFindByUUIDKO(t *testing.T) {
 	}
 }
 
-func TestPreferedOK(t *testing.T) {
-	step = 5
-	qs := repo.Prefered()
-	if len(qs) != 5 {
-		t.Error("No prefered quote")
+func TestPreferredOK(t *testing.T) {
+	step = 0
+	qs := repo.Preferred()
+	if len(qs) != 2 {
+		t.Error("No preferred quote")
 	}
 }
 
-func TestPreferedKO(t *testing.T) {
+func TestPreferredKO(t *testing.T) {
 	step = 3
-	qs := repo.Prefered()
+	qs := repo.Preferred()
 	if len(qs) != 0 {
-		t.Error("There's prefered quotes")
+		t.Error("There's preferred quotes")
 	}
 }
 

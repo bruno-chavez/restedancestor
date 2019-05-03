@@ -8,6 +8,6 @@ import (
 type QuoteType struct {
 	ID    int       `json:"id"`
 	Quote string    `json:"quote"`
-	Uuid  uuid.UUID `json:"uuid"`
+	UUID  uuid.UUID `json:"uuid"`
 	Score int       `json:"score"`
 }
