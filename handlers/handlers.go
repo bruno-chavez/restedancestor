@@ -20,7 +20,8 @@ var repo = quotes.NewRepository(database.NewDb())
 
 // Random takes care of the 'random' route.
 func Random(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	err := writeJSON(w, parsedQuotes.Random())
+	q := repo.Random()
+	err := writeJSON(w, q)
 	if err != nil {
 		log.Fatal(err)
 	}

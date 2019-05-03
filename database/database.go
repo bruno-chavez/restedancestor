@@ -72,7 +72,7 @@ type Stmt interface {
 
 // NewDb initialise a new connection
 func NewDb() Database {
-	s, err := sqlite3.Open("./mydatabase.db")
+	s, err := sqlite3.Open("./database/database.db")
 	if err != nil {
 		log.Fatal(err)
 	}

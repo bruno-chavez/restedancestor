@@ -19,6 +19,26 @@ type Repository struct {
 	db database.Database
 }
 
+// Random returns one quote, randomly
+func (r Repository) Random() *QuoteType {
+	stmt, err := r.db.Prepare(`SELECT content, score, uuid
+        FROM quotes
+        ORDER BY RANDOM()
+        LIMIT 1`)
+
+	if err != nil {
+		log.Fatal("Malformed SQL :" + err.Error())
+	}
+	defer stmt.Close()
+
+	slice := buildSliceFromData(stmt)
+	if len(slice) == 0 {
+		return nil
+	}
+
+	return &slice[0]
+}
+
 // All returns all quotes
 func (r Repository) All() []QuoteType {
 	stmt, err := r.db.Prepare(`SELECT content, score, uuid

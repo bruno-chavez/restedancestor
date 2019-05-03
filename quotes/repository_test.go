@@ -38,6 +38,22 @@ func (s StmtDouble) Scan(dst ...interface{}) error {
 
 var repo = NewRepository(DbDouble{})
 
+func TestRandomOK(t *testing.T) {
+	step = 1
+	q := repo.Random()
+	if q == nil {
+		t.Error("Fail for random")
+	}
+}
+
+func TestRandomKO(t *testing.T) {
+	step = 3
+	q := repo.Random()
+	if q != nil {
+		t.Error("Success for random")
+	}
+}
+
 func TestAllOK(t *testing.T) {
 	step = 1
 	qs := repo.All()
