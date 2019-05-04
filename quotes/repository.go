@@ -125,7 +125,7 @@ func buildSliceFromData(stmt database.Stmt) []QuoteType {
 		// Parsing UUID from string input
 		u2, _ := uuid.FromString(u)
 		q := QuoteType{
-			ID:    i,
+			id:    i,
 			Quote: c,
 			UUID:  u2,
 			Score: s,
@@ -184,8 +184,8 @@ func (r Repository) index(q QuoteType) {
 	for _, w := range words {
 		wLower := strings.ToLower(w)
 		if len(wLower) > limitSize {
-			r.storeIndex(wLower, q.ID)
-			log.Println("Store :", wLower, q.ID)
+			r.storeIndex(wLower, q.id)
+			log.Println("Store :", wLower, q.id)
 		}
 	}
 }

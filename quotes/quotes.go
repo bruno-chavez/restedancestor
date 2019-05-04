@@ -6,7 +6,7 @@ import (
 
 // QuoteType describes a quote.
 type QuoteType struct {
-	ID    int       `json:"id"`
+	id    int
 	Quote string    `json:"quote"`
 	UUID  uuid.UUID `json:"uuid"`
 	Score int       `json:"score"`

@@ -6,6 +6,9 @@ notifications:
   email:
     on_success: never
 
+before_script:
+  - make install
+
 script:
   - make test
 
