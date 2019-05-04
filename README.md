@@ -2,28 +2,45 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/bruno-chavez/restedancestor)](https://goreportcard.com/report/github.com/bruno-chavez/restedancestor)
 [![Build Status](https://travis-ci.org/bruno-chavez/restedancestor.svg?branch=master)](https://travis-ci.org/bruno-chavez/restedancestor)
 
-`restedancestor` is a pretty simple REST API, delivers quotes from the Ancestor of the Darkest Dungeon in JSON format.
+`restedancestor` is a pretty simple REST API, 
+delivers quotes from the Ancestor of the 
+Darkest Dungeon in JSON format.
 
 ##  Online
 
-`restedancestor` is currently online at https://restedancestor.herokuapp.com, skip to the [Routes](https://github.com/bruno-chavez/restedancestor/tree/master#routes) section to see how you can consume the API.
+`restedancestor` is currently online at 
+https://restedancestor.herokuapp.com, 
+skip to the 
+[Routes](https://github.com/bruno-chavez/restedancestor/tree/master#routes) 
+section to see how you can consume the API.
 
 ## Local Use
 
-`restedancestor`'s master branch can be used to deploy a local copy for development, testing or for whatever fits your needs, you can either download a binary or compile it yourself, either way follow instructions below.
+`restedancestor`'s master branch can be used 
+to deploy a local copy for development, 
+testing or for whatever fits your needs, 
+you can either download a binary or compile it yourself, 
+either way follow instructions below.
 
 ### Executables:
 
-`restedancestor` supports Linux and Mac, and can be downloaded [here](https://github.com/bruno-chavez/restedancestor/releases) simply click on the one that has your OS and architecture on its name.
+`restedancestor` supports Linux, Windows and Mac, 
+and can be downloaded 
+[here](https://github.com/bruno-chavez/restedancestor/releases) 
+simply click on the one that has your OS and architecture on its name.
 
-After its downloaded run the executable and start making requests!
+After its downloaded, place the executable in a directory with 
+a subdirectory name database and the `database.db` file in it copy 
+the db file `database.db` in it, then you can run the executable 
+and use it!
 
 #### From source code:
 
 Requires Go to be installed on your machine. You can install Go from
 [here](https://golang.org/doc/install).
 
-Once installed, and with a correctly configured GOPATH, on a terminal type:
+Once installed, and with a correctly configured GOPATH, 
+on a terminal type:
 
 ```
 $ go get github.com/bruno-chavez/restedancestor
@@ -43,7 +60,8 @@ $ make install
 
 ##### Usage
 
-Once installed and depending on how you installed the API should see a message like this:
+Once installed and depending on how you installed the API 
+should see a message like this:
 
 ```
 $ restedancestor
@@ -51,7 +69,10 @@ Welcome to restedancestor, the API is running in a maddening fashion!
 The Ancestor is waiting and listening on port 8080 of localhost
 ```
 
-You can communicate with the API in various ways, for example going to your browser and typing on your search bar `localhost:8080`, followed with one of the routes listed on the Routes section, if succesful you should see something like this:
+You can communicate with the API in various ways, 
+for example going to your browser and typing on your search 
+bar `localhost:8080`, followed with one of the routes listed on 
+the Routes section, if succesful you should see something like this:
 
 ![browser image](assets/images/browserImage.png)
 
@@ -85,7 +106,8 @@ Content-Length: 67
 
 Where {word} is the word that wants to be found in the database.
 
-For example requesting a GET method on /search/prince will return a JSON body and a NotFoundStatus Header like this:
+For example requesting a GET method on /search/prince 
+will return a JSON body and a NotFoundStatus Header like this:
 
 ```
 HTTP/1.1 404 Not Found
@@ -99,7 +121,9 @@ Content-Length: 70
 }
 ```
 
-But requesting at /search/swine will return a JSON body with all the quotes that the word was found on and a OKStatus Header:
+But requesting at /search/swine 
+will return a JSON body with all the quotes that the 
+word was found on and a OKStatus Header:
 
 ```
 HTTP/1.1 200 OK
@@ -150,8 +174,8 @@ Transfer-Encoding: chunked
 
 ##### GET:
 
-Responds with a JSON body with an original quote made from merging parts
-of two existing quotes.
+Responds with a JSON body with an original quote 
+made from merging parts of two existing quotes.
 
 ```
 HTTP/1.1 200 OK
@@ -197,7 +221,8 @@ Transfer-Encoding: chunked
 
 ##### GET:
 
-Where {uuid} is the unique identifier of a quote, respondes with a JSON body with that quote in it.
+Where {uuid} is the unique identifier of a quote, 
+respondes with a JSON body with that quote in it.
 
 ```
 HTTP/1.1 200 OK
@@ -216,7 +241,8 @@ Content-Length: 67
 
 ##### POST:
 
-Responds with a Not Found Error in case the uuid is wrong, or an OK status if not.
+Responds with a Not Found Error in case the uuid is wrong, 
+or an OK status if not.
 
 ```
 HTTP/1.1 200 OK
@@ -228,7 +254,8 @@ Content-Length: 0
 
 ##### POST:
 
-Responds with a Not Found Error in case the uuid is wrong, or an OK status if not.
+Responds with a Not Found Error in case the uuid is wrong, 
+or an OK status if not.
 
 ```
 HTTP/1.1 200 OK
@@ -243,18 +270,20 @@ so do that!
 
 Only tested on Linux.
 
-Not supported for Windows.
+Sister project of 
+[ancestorquotes](https://github.com/bruno-chavez/ancestorquotes).
 
-Sister project of [ancestorquotes](https://github.com/bruno-chavez/ancestorquotes).
-
-Current version: `1.0`
+Current version: `2.0`
 
 ## Contribute
 
-Found an bug or an error? Post it in the [issue tracker](https://github.com/bruno-chavez/ancestorquotes/issues).
+Found an bug or an error? Post it in the 
+[issue tracker](https://github.com/bruno-chavez/ancestorquotes/issues).
 
-Want to add an awesome new feature? [Fork](https://github.com/bruno-chavez/ancestorquotes/fork) this repository and add your feature, then send a pull request.
+Want to add an awesome new feature? 
+[Fork](https://github.com/bruno-chavez/ancestorquotes/fork) 
+this repository and add your feature, then send a pull request.
 
 ## License
 The MIT License (MIT)
-Copyright (c) 2018 Bruno Chavez
+Copyright (c) 2019 Bruno Chavez
