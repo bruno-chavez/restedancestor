@@ -221,7 +221,7 @@ Content-Length: 67
 
 ### `/uuid/{uuid}/like`
 
-##### PATCH:
+##### POST:
 
 Responds with a Not Found Error in case the uuid is wrong, or an OK status if not.
 
@@ -233,7 +233,7 @@ Content-Length: 0
 
 ### `/uuid/{uuid}/dislike`
 
-##### PATCH:
+##### POST:
 
 Responds with a Not Found Error in case the uuid is wrong, or an OK status if not.
 
