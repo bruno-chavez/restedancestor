@@ -4,8 +4,8 @@ import (
 	"github.com/satori/go.uuid"
 )
 
-// QuoteType describes a quote.
-type QuoteType struct {
+// Quote describes a quote.
+type Quote struct {
 	id    int
 	Quote string    `json:"quote"`
 	UUID  uuid.UUID `json:"uuid"`
