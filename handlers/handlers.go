@@ -13,30 +13,33 @@ import (
 
 var repo = quotes.NewRepository(database.NewDb())
 
-// Random takes care of the 'random' route.
+// Random handles the '/random' endpoint
 func Random(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
+
 	q := repo.Random()
-	err := writeJSON(w, q)
+	err := writeResponse(w, q)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-// All takes care of the 'all' route.
+// All handles the '/all' endpoint
 func All(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	err := writeJSON(w, repo.All())
+
+	err := writeResponse(w, repo.All())
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-// Search takes care of the /search/{word} route.
+// Search handles the '/search' endpoint
 func Search(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
+
 	word := strings.ToLower(p.ByName("word"))
 	qs := repo.AllByWord(word)
 
 	if len(qs) != 0 {
-		err := writeJSON(w, qs)
+		err := writeResponse(w, qs)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -48,8 +51,9 @@ func Search(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 	}
 }
 
-// Senile takes care of the 'senile' route
+// Senile handles the '/senile' endpoint
 func Senile(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
+
 	q1 := repo.Random()
 	q2 := repo.Random()
 
@@ -63,15 +67,16 @@ func Senile(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 		quote = stringModifier(quoteArray1, quoteArray)
 	}
 
-	joinedQuote := quotes.QuoteType{Quote: quote}
-	err := writeJSON(w, joinedQuote)
+	joinedQuote := quotes.Quote{Quote: quote}
+	err := writeResponse(w, joinedQuote)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-// Find takes care of the /one/{UUID} route.
+// Find handles the '/uuid/:uuid/find' endpoint
 func Find(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
+
 	uuidToSearch := p.ByName("uuid")
 
 	q := repo.FindByUUID(uuidToSearch)
@@ -83,14 +88,15 @@ func Find(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 		return
 	}
 
-	err := writeJSON(w, q)
+	err := writeResponse(w, q)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-// Like takes care of the /one/{UUID}/like route.
+// Like handles the '/uuid/:uuid/like' endpoint
 func Like(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
+
 	uuidToSearch := p.ByName("uuid")
 
 	if err := repo.IncrementsScore(uuidToSearch); err != nil {
@@ -102,8 +108,9 @@ func Like(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 	}
 }
 
-// Dislike takes care of the /one/{UUID}/dislike route.
+// Dislike handles the '/uuid/:uuid/dislike' endpoint
 func Dislike(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
+
 	uuidToSearch := p.ByName("uuid")
 
 	if err := repo.DecrementsScore(uuidToSearch); err != nil {
@@ -115,9 +122,10 @@ func Dislike(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 	}
 }
 
-// Top takes care of the /top route.
+// Top handles the '/top' endpoint
 func Top(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	err := writeJSON(w, repo.Preferred())
+
+	err := writeResponse(w, repo.Preferred())
 	if err != nil {
 		log.Fatal(err)
 	}
