@@ -1,6 +1,6 @@
-all: install test hard-lint
+all: test hard-lint
 
-test:
+test: install
 	go test ./...
 
 hard-lint:

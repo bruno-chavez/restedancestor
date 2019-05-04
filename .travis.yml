@@ -7,7 +7,7 @@ notifications:
     on_success: never
 
 script:
-  - go test ./...
+  - make test
 
 before_deploy:
   - GOOS=linux GOARCH=amd64 go build -o restedancestor-linux-amd64
