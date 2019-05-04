@@ -2,26 +2,21 @@
 package handlers
 
 import (
-	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
-	"sort"
 	"strings"
 
 	"github.com/bruno-chavez/restedancestor/database"
 	"github.com/bruno-chavez/restedancestor/quotes"
+	"github.com/julienschmidt/httprouter"
 )
 
-const nbTop = 5
-
-// parsedQuotes is a global variable to avoid multiple calls to Parser since always returns the same parsedQuotes.
-var db = &database.File{}
-var parsedQuotes = quotes.Parser(*db)
+var repo = quotes.NewRepository(database.NewDb())
 
 // Random takes care of the 'random' route.
 func Random(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-
-	err := writeJSON(w, parsedQuotes.Random())
+	q := repo.Random()
+	err := writeJSON(w, q)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,7 +24,7 @@ func Random(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 
 // All takes care of the 'all' route.
 func All(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	err := writeJSON(w, parsedQuotes)
+	err := writeJSON(w, repo.All())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,40 +32,11 @@ func All(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 
 // Search takes care of the /search/{word} route.
 func Search(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
+	word := strings.ToLower(p.ByName("word"))
+	qs := repo.AllByWord(word)
 
-	word := p.ByName("word")
-	matched := false
-	quotesMatched := make(quotes.QuoteSlice, 0)
-
-	// quote is a QuoteType type.
-	// xSlice is a parsedQuotes with one word and white-spaces that appear after a filter is applied.
-	// xFilter is a string inside a wordXSlice.
-	// This for is a candidate for been transformed into an recursive function inside lib.
-	for _, quote := range parsedQuotes {
-		firstSlice := strings.Split(quote.Quote, " ")
-
-		for _, firstFilter := range firstSlice {
-			secondSlice := strings.Split(firstFilter, ",")
-
-			for _, secondFilter := range secondSlice {
-				thirdSlice := strings.Split(secondFilter, "!")
-
-				for _, thirdFilter := range thirdSlice {
-					filteredWord := strings.Split(thirdFilter, ".")
-
-					// After all the filters are applied the filtered word is compared with the word that is been searched.
-					// If a match is found, the quote that the filtered word belongs to, is printed.
-					if filteredWord[0] == word {
-						quotesMatched = append(quotesMatched, quote)
-						matched = true
-					}
-				}
-			}
-		}
-	}
-
-	if matched {
-		err := writeJSON(w, quotesMatched)
+	if len(qs) != 0 {
+		err := writeJSON(w, qs)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -84,12 +50,11 @@ func Search(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 
 // Senile takes care of the 'senile' route
 func Senile(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
+	q1 := repo.Random()
+	q2 := repo.Random()
 
-	data := parsedQuotes.Random()
-	data1 := parsedQuotes.Random()
-
-	quoteArray := strings.Split(data.Quote, " ")
-	quoteArray1 := strings.Split(data1.Quote, " ")
+	quoteArray := strings.Split(q1.Quote, " ")
+	quoteArray1 := strings.Split(q2.Quote, " ")
 	var quote string
 
 	if len(quoteArray) < len(quoteArray1) {
@@ -107,19 +72,18 @@ func Senile(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 
 // Find takes care of the /one/{UUID} route.
 func Find(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
-
 	uuidToSearch := p.ByName("uuid")
 
-	offset, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch)
-	if err != nil {
-		err = writeNotFound(w, uuidToSearch)
+	q := repo.FindByUUID(uuidToSearch)
+	if q == nil {
+		err := writeNotFound(w, uuidToSearch)
 		if err != nil {
 			log.Fatal(err)
 		}
 		return
 	}
 
-	err = writeJSON(w, parsedQuotes[*offset])
+	err := writeJSON(w, q)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -127,54 +91,33 @@ func Find(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 
 // Like takes care of the /one/{UUID}/like route.
 func Like(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
-
 	uuidToSearch := p.ByName("uuid")
 
-	if _, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch); err != nil {
+	if err := repo.IncrementsScore(uuidToSearch); err != nil {
 		err = writeNotFound(w, uuidToSearch)
 		if err != nil {
 			log.Fatal(err)
 		}
 		return
 	}
-
-	parsedQuotes.LikeQuote(db, uuidToSearch)
-
 }
 
 // Dislike takes care of the /one/{UUID}/dislike route.
 func Dislike(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
-
 	uuidToSearch := p.ByName("uuid")
 
-	if _, err := parsedQuotes.OffsetQuoteFromUUID(uuidToSearch); err != nil {
+	if err := repo.DecrementsScore(uuidToSearch); err != nil {
 		err = writeNotFound(w, uuidToSearch)
 		if err != nil {
 			log.Fatal(err)
 		}
 		return
 	}
-
-	parsedQuotes.DislikeQuote(db, uuidToSearch)
-
 }
 
 // Top takes care of the /top route.
 func Top(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-
-	sort.Sort(parsedQuotes)
-
-	i := 0
-	top := make(quotes.QuoteSlice, 0)
-	for _, quote := range parsedQuotes {
-		if i >= nbTop {
-			break
-		}
-		top = append(top, quote)
-		i++
-	}
-
-	err := writeJSON(w, top)
+	err := writeJSON(w, repo.Preferred())
 	if err != nil {
 		log.Fatal(err)
 	}
