@@ -24,10 +24,9 @@ either way follow instructions below.
 
 ### Executables:
 
-`restedancestor` supports Linux, Windows and Mac, 
-and can be downloaded 
-[here](https://github.com/bruno-chavez/restedancestor/releases) 
-simply click on the one that has your OS and architecture on its name.
+`restedancestor` supports Linux, Windows and Mac, but you need 
+to compile it yourself since the project uses CGO, 
+cross-compiling can't be enabled.
 
 After its downloaded, place the executable in a directory with 
 a subdirectory name database and the `database.db` file in it copy 
@@ -265,8 +264,8 @@ Content-Length: 0
 
 ## Notes
 
-This is a pretty small and niche project, created mainly to have fun,
-so do that!
+This is a pretty small and niche project, created mainly 
+to have fun and learn, so do that!
 
 Only tested on Linux.
 
