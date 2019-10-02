@@ -3,8 +3,8 @@
 [![Build Status](https://travis-ci.org/bruno-chavez/restedancestor.svg?branch=master)](https://travis-ci.org/bruno-chavez/restedancestor)
 
 `restedancestor` is a pretty simple REST API, 
-delivers quotes from the Ancestor of the 
-Darkest Dungeon in JSON format.
+that delivers quotes from Darkest Dungeon's Narrator, named Ancestor, 
+in JSON format. 
 
 ##  Online
 
@@ -18,9 +18,9 @@ section to see how you can consume the API.
 
 `restedancestor`'s master branch can be used 
 to deploy a local copy for development, 
-testing or for whatever fits your needs, 
-you can either download a binary or compile it yourself, 
-either way follow instructions below.
+testing or for whatever fits your needs.
+You can either download a binary or compile it yourself, 
+either way follow the instructions below.
 
 ### Executables:
 
@@ -28,18 +28,13 @@ either way follow instructions below.
 to compile it yourself since the project uses CGO, 
 cross-compiling can't be enabled.
 
-After its downloaded, place the executable in a directory with 
-a subdirectory name database and the `database.db` file in it copy 
-the db file `database.db` in it, then you can run the executable 
-and use it!
-
 #### From source code:
 
 Requires Go to be installed on your machine. You can install Go from
 [here](https://golang.org/doc/install).
 
 Once installed, and with a correctly configured GOPATH, 
-on a terminal type:
+on terminal type:
 
 ```
 $ go get github.com/bruno-chavez/restedancestor
@@ -60,7 +55,7 @@ $ make install
 ##### Usage
 
 Once installed and depending on how you installed the API 
-should see a message like this:
+you should see a message like this:
 
 ```
 $ restedancestor
@@ -70,12 +65,13 @@ The Ancestor is waiting and listening on port 8080 of localhost
 
 You can communicate with the API in various ways, 
 for example going to your browser and typing on your search 
-bar `localhost:8080`, followed with one of the routes listed on 
-the Routes section, if succesful you should see something like this:
+bar `localhost:8080`, followed by one of the routes listed on 
+the Routes section. 
+If succesful you should see something like this:
 
 ![browser image](assets/images/browserImage.png)
 
-There are more complete ways of doing requests to the API, and choosing one depends completly on preference, if you like Desktop Apps [Postman](https://www.getpostman.com/) is a pretty powerful tool, prefer web tools? check [Hurl it](https://www.hurl.it/), like CLI apps? [HTTPie](https://httpie.org/) is good enough for the job.
+There are more complete ways of doing requests to the API, and choosing one depends completely on preference, if you like Desktop Apps [Postman](https://www.getpostman.com/) is a pretty powerful tool, prefer web tools? check [Hurl it](https://www.hurl.it/), like CLI apps? [HTTPie](https://httpie.org/) is good enough for the job.
 
 ## Routes
 
@@ -103,7 +99,7 @@ Content-Length: 67
 
 ##### GET:
 
-Where {word} is the word that wants to be found in the database.
+Where {word} is the word to be found in the database.
 
 For example requesting a GET method on /search/prince 
 will return a JSON body and a NotFoundStatus Header like this:
@@ -193,7 +189,7 @@ Content-Length: 134
 
 ##### GET:
 
-Responds with the top five most liked quotes in a JSON body.
+Responds with a JSON body of the top five most liked quotes.
 
 ```
 HTTP/1.1 200 OK
@@ -220,8 +216,8 @@ Transfer-Encoding: chunked
 
 ##### GET:
 
-Where {uuid} is the unique identifier of a quote, 
-respondes with a JSON body with that quote in it.
+Where {uuid} is the unique identifier of a quote.
+Responds with a JSON body of the quote linked to the uuid.
 
 ```
 HTTP/1.1 200 OK
@@ -240,8 +236,8 @@ Content-Length: 67
 
 ##### POST:
 
-Responds with a Not Found Error in case the uuid is wrong, 
-or an OK status if not.
+Responds with a Not Found Error if the uuid is wrong, 
+else an OK status.
 
 ```
 HTTP/1.1 200 OK
@@ -253,8 +249,8 @@ Content-Length: 0
 
 ##### POST:
 
-Responds with a Not Found Error in case the uuid is wrong, 
-or an OK status if not.
+Responds with a Not Found Error if the uuid is wrong, 
+else an OK status.
 
 ```
 HTTP/1.1 200 OK
@@ -276,7 +272,7 @@ Current version: `2.0`
 
 ## Contribute
 
-Found an bug or an error? Post it in the 
+Found a bug or an error? Post it in the 
 [issue tracker](https://github.com/bruno-chavez/ancestorquotes/issues).
 
 Want to add an awesome new feature? 
