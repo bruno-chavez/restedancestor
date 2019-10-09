@@ -67,7 +67,7 @@ You can communicate with the API in various ways,
 for example going to your browser and typing on your search 
 bar `localhost:8080`, followed by one of the routes listed on 
 the Routes section. 
-If succesful you should see something like this:
+If successful you should see something like this:
 
 ![browser image](assets/images/browserImage.png)
 
@@ -118,7 +118,7 @@ Content-Length: 70
 
 But requesting at /search/swine 
 will return a JSON body with all the quotes that the 
-word was found on and a OKStatus Header:
+word was found on and an OKStatus Header:
 
 ```
 HTTP/1.1 200 OK
