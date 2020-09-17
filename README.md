@@ -232,6 +232,34 @@ Content-Length: 67
 }
 ```
 
+### `/length/{len}`
+
+##### GET:
+
+Where {len} is the maximum length of a quote that the user needs.
+Responds with a JSON body of the quotes which are lesser than or equal 
+to {len}.
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Mon, 04 Jun 2018 09:46:36 GMT
+Content-Length: 67
+
+[
+    {
+        "quote": "Decimated!",
+        "uuid": "96fc33e1-ee31-403c-a932-c788e579dc34",
+        "score": 0
+    },
+    {
+        "quote": "Destroyed!",
+        "uuid": "d5ff203c-3f8b-4c35-b74f-71565ae60dd4",
+        "score": 0
+    }
+]
+```
+
 ### `/uuid/{uuid}/like`
 
 ##### POST:

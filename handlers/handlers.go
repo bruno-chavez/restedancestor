@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"unicode"
+	"strconv"
 
 	"github.com/bruno-chavez/restedancestor/database"
 	"github.com/bruno-chavez/restedancestor/quotes"
@@ -71,6 +73,35 @@ func Senile(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	err := writeResponse(w, joinedQuote)
 	if err != nil {
 		log.Fatal(err)
+	}
+}
+
+func Length(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
+
+	log.Println("testing length")
+	word := p.ByName("len")
+
+	for _, r := range word { 
+		err := unicode.IsLetter(r) 
+		if err {
+			log.Fatal("Not a number")
+			return
+		}
+    }
+	
+	length, _ := strconv.ParseUint(word, 10, 32)
+	qs := repo.AllByLengthLessThanOrEqual(length)
+
+	if len(qs) != 0 {
+		err := writeResponse(w, qs)
+		if err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		err := writeNotFound(w, word)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
