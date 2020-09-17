@@ -4,6 +4,8 @@ import (
 	"errors"
 	"log"
 	"strings"
+	"strconv"
+	"fmt"
 
 	"github.com/bruno-chavez/restedancestor/database"
 	uuid "github.com/satori/go.uuid"
@@ -72,6 +74,29 @@ func (r Repository) AllByWord(w string) []Quote {
         FROM indexes i INNER JOIN indexes_quotes iq ON i.id_index = iq.id_index INNER JOIN quotes q ON iq.id_quote = q.id_quote
         WHERE word = ?
         ORDER BY q.id_quote`, w)
+	if err != nil {
+		log.Fatal("Malformed SQL :" + err.Error())
+	}
+
+	// closes db connection
+	defer func() {
+		err := stmt.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	return buildSliceFromData(stmt)
+}
+
+// AllLengthLessThanOrEqual returns all quotes with length less than or equal to
+func (r Repository) AllByLengthLessThanOrEqual(length uint64) []Quote {
+	
+	str := fmt.Sprintf("SELECT id_quote, content, score, uuid FROM quotes WHERE length(content)<=%d", length)
+
+	stmt, err := r.db.Prepare(str)
+
+	log.Println(strconv.FormatUint(length, 10))
 	if err != nil {
 		log.Fatal("Malformed SQL :" + err.Error())
 	}
